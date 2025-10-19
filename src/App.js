@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/Layout';
 import Home from './components/Home';
+import AboutUs from './components/AboutUs';
 import Pengumuman from './components/Pengumuman';
 import Galeri from './components/Galeri';
 import Kegiatan from './components/Kegiatan';
@@ -15,6 +16,7 @@ function App() {
       <Layout>
         <Routes>
           <Route path="/" element={<Home />} />
+          <Route path="/tentang-kami" element={<AboutUs />} />
           <Route path="/pengumuman" element={<Pengumuman />} />
           <Route path="/galeri" element={<Galeri />} />
           <Route path="/kegiatan" element={<Kegiatan />} />

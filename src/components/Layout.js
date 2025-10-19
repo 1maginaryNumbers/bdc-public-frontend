@@ -30,6 +30,16 @@ const Layout = ({ children }) => {
                 Beranda
               </Link>
               <Link 
+                to="/tentang-kami" 
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/tentang-kami') 
+                    ? 'text-orange-600 bg-orange-50' 
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                Tentang Kami
+              </Link>
+              <Link 
                 to="/pengumuman" 
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
                   isActive('/pengumuman') 
