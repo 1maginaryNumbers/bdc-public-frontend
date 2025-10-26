@@ -22,7 +22,7 @@ const AboutUs = () => {
     e.preventDefault();
     
     try {
-      const response = await fetch('http://finalbackend-ochre.vercel.app/api/saran', {
+      const response = await fetch('https://finalbackend-ochre.vercel.app/api/saran', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

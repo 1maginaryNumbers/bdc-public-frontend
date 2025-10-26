@@ -15,7 +15,7 @@ const Home = () => {
 
   const fetchActivities = async () => {
     try {
-      const response = await fetch('http://finalbackend-ochre.vercel.app/api/kegiatan');
+      const response = await fetch('https://finalbackend-ochre.vercel.app/api/kegiatan');
       const data = await response.json();
       
       // Handle both old format (array) and new format (object with kegiatan property)
@@ -35,7 +35,7 @@ const Home = () => {
 
   const fetchGalleryImages = async () => {
     try {
-      const response = await fetch('http://finalbackend-ochre.vercel.app/api/galeri?limit=50');
+      const response = await fetch('https://finalbackend-ochre.vercel.app/api/galeri?limit=50');
       const data = await response.json();
       setGalleryImages(data.images || data);
       setLoading(false);
@@ -87,7 +87,7 @@ const Home = () => {
       <section 
         className="relative bg-cover bg-center bg-no-repeat text-white py-20"
         style={{
-          backgroundImage: `url('http://finalbackend-ochre.vercel.app/uploads/galeri/images-1760896504757-356016500.jpg')`
+          backgroundImage: `url('https://finalbackend-ochre.vercel.app/uploads/galeri/images-1760896504757-356016500.jpg')`
         }}
       >
         <div className="absolute inset-0 bg-black bg-opacity-50"></div>
@@ -292,7 +292,7 @@ const Home = () => {
                       <div key={image.uniqueKey} className="w-1/4 flex-shrink-0 px-2">
                         <div className="relative group">
                           <img
-                            src={`http://finalbackend-ochre.vercel.app${image.url}`}
+                            src={`https://finalbackend-ochre.vercel.app${image.url}`}
                             alt={image.judul}
                             className="w-full h-48 object-cover rounded-lg hover:scale-105 transition-transform duration-300 cursor-pointer"
                             onError={(e) => {

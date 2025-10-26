@@ -17,7 +17,7 @@ const Galeri = () => {
   const fetchGalleryImages = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await fetch(`http://finalbackend-ochre.vercel.app/api/galeri?page=${currentPage}&limit=20`);
+      const response = await fetch(`https://finalbackend-ochre.vercel.app/api/galeri?page=${currentPage}&limit=20`);
       const data = await response.json();
       setGalleryImages(data.images);
       setPagination(data.pagination);
@@ -178,7 +178,7 @@ const Galeri = () => {
             <div key={image._id} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
               <div className="aspect-w-16 aspect-h-12">
                 <img
-                  src={`http://finalbackend-ochre.vercel.app${image.url}`}
+                  src={`https://finalbackend-ochre.vercel.app${image.url}`}
                   alt={image.judul}
                   className="w-full h-48 object-cover"
                   onError={(e) => {

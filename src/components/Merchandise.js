@@ -10,7 +10,7 @@ const Merchandise = () => {
 
   const fetchProducts = async () => {
     try {
-      const response = await fetch('http://finalbackend-ochre.vercel.app/api/merchandise');
+      const response = await fetch('https://finalbackend-ochre.vercel.app/api/merchandise');
       const data = await response.json();
       
       // Handle both old format (array) and new format (object with merchandise property)
@@ -54,7 +54,7 @@ const Merchandise = () => {
               <div className="p-6 text-center">
                 {product.gambar ? (
                   <img
-                    src={`http://finalbackend-ochre.vercel.app${product.gambar}`}
+                    src={`https://finalbackend-ochre.vercel.app${product.gambar}`}
                     alt={product.nama}
                     className="w-full h-32 object-cover rounded-lg mb-4"
                     onError={(e) => {
