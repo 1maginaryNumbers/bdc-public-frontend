@@ -30,7 +30,7 @@ const Kegiatan = () => {
 
   const fetchActivities = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/kegiatan');
+      const response = await fetch('http://finalbackend-ochre.vercel.app/api/kegiatan');
       const data = await response.json();
       
       // Handle both old format (array) and new format (object with kegiatan property)
@@ -89,7 +89,7 @@ const Kegiatan = () => {
     
     setIsCheckingRegistration(true);
     try {
-      const response = await fetch(`http://localhost:5000/api/pendaftaran/check/${selectedActivity._id}/${encodeURIComponent(email)}`);
+      const response = await fetch(`http://finalbackend-ochre.vercel.app/api/pendaftaran/check/${selectedActivity._id}/${encodeURIComponent(email)}`);
       const data = await response.json();
       setIsAlreadyRegistered(data.isRegistered);
     } catch (error) {
@@ -111,7 +111,7 @@ const Kegiatan = () => {
     setIsSubmitting(true);
 
     try {
-      const response = await fetch(`http://localhost:5000/api/kegiatan/${selectedActivity._id}/daftar`, {
+      const response = await fetch(`http://finalbackend-ochre.vercel.app/api/kegiatan/${selectedActivity._id}/daftar`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

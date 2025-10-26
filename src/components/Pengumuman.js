@@ -10,7 +10,7 @@ const Pengumuman = () => {
 
   const fetchAnnouncements = async () => {
     try {
-      const response = await fetch('http://localhost:5000/api/pengumuman');
+      const response = await fetch('http://finalbackend-ochre.vercel.app/api/pengumuman');
       const data = await response.json();
       
       // Handle both old format (array) and new format (object with pengumuman property)
