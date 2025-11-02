@@ -17,16 +17,16 @@ const Layout = ({ children }) => {
   return (
     <div className="min-h-screen bg-gray-50">
       <nav className="bg-white shadow-lg sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-lg sm:text-2xl font-bold text-gray-900 hover:text-orange-600 transition-colors">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex justify-between items-center h-14 sm:h-16">
+            <div className="flex items-center flex-1 min-w-0">
+              <Link to="/" className="text-base sm:text-xl lg:text-2xl font-bold text-gray-900 hover:text-orange-600 transition-colors truncate">
                 Vihara BDC
               </Link>
             </div>
             
             {/* Desktop Navigation */}
-            <div className="hidden md:flex items-center space-x-8">
+            <div className="hidden md:flex items-center space-x-4 lg:space-x-8 ml-4">
               <Link 
                 to="/" 
                 className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
@@ -112,23 +112,24 @@ const Layout = ({ children }) => {
             {/* Mobile Menu Toggle */}
             <button
               onClick={toggleMenu}
-              className="md:hidden text-gray-700 hover:text-gray-900 p-2"
+              className="md:hidden text-gray-700 hover:text-gray-900 active:text-orange-600 p-2 -mr-2 flex-shrink-0"
+              aria-label="Toggle menu"
             >
-              {isMenuOpen ? <FiX size={24} /> : <FiMenu size={24} />}
+              {isMenuOpen ? <FiX size={22} /> : <FiMenu size={22} />}
             </button>
           </div>
 
           {/* Mobile Navigation */}
           {isMenuOpen && (
-            <div className="md:hidden border-t border-gray-200 py-4">
-              <div className="flex flex-col space-y-2">
+            <div className="md:hidden border-t border-gray-200 py-3">
+              <div className="flex flex-col space-y-1">
                 <Link 
                   to="/" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Beranda
@@ -136,10 +137,10 @@ const Layout = ({ children }) => {
                 <Link 
                   to="/tentang-kami" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/tentang-kami') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Tentang Kami
@@ -147,10 +148,10 @@ const Layout = ({ children }) => {
                 <Link 
                   to="/pengumuman" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/pengumuman') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Pengumuman
@@ -158,10 +159,10 @@ const Layout = ({ children }) => {
                 <Link 
                   to="/galeri" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/galeri') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Galeri
@@ -169,10 +170,10 @@ const Layout = ({ children }) => {
                 <Link 
                   to="/kegiatan" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/kegiatan') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Kegiatan
@@ -180,10 +181,10 @@ const Layout = ({ children }) => {
                 <Link 
                   to="/struktur" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/struktur') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Struktur
@@ -191,10 +192,10 @@ const Layout = ({ children }) => {
                 <Link 
                   to="/merchandise" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/merchandise') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Merchandise
@@ -202,10 +203,10 @@ const Layout = ({ children }) => {
                 <Link 
                   to="/donasi" 
                   onClick={() => setIsMenuOpen(false)}
-                  className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
                     isActive('/donasi') 
                       ? 'text-orange-600 bg-orange-50' 
-                      : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                      : 'text-gray-700 active:bg-gray-100'
                   }`}
                 >
                   Donasi
