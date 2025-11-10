@@ -116,6 +116,11 @@ const Kegiatan = () => {
       return;
     }
     
+    if (!selectedActivity || selectedActivity.status !== 'sedang_berlangsung') {
+      alert('Pendaftaran hanya dapat dilakukan untuk kegiatan dengan status Aktif.');
+      return;
+    }
+    
     setIsSubmitting(true);
 
     try {
