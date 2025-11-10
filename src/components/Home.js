@@ -4,14 +4,21 @@ import { useNavigate } from 'react-router-dom';
 const Home = () => {
   const [activities, setActivities] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
+  const [jadwal, setJadwal] = useState([]);
+  const [kategori, setKategori] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchActivities();
     fetchGalleryImages();
   }, []);
+
+  useEffect(() => {
+    fetchJadwal();
+  }, [currentDate]);
 
   const fetchActivities = async () => {
     try {
@@ -42,6 +49,25 @@ const Home = () => {
     } catch (error) {
       console.error('Error fetching gallery images:', error);
       setLoading(false);
+    }
+  };
+
+  const fetchJadwal = async () => {
+    try {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      const [jadwalRes, kategoriRes] = await Promise.all([
+        fetch(`https://finalbackend-ochre.vercel.app/api/jadwal?year=${year}&month=${month}`),
+        fetch('https://finalbackend-ochre.vercel.app/api/kategori-jadwal')
+      ]);
+      const jadwalData = await jadwalRes.json();
+      const kategoriData = await kategoriRes.json();
+      setJadwal(Array.isArray(jadwalData) ? jadwalData : []);
+      setKategori(Array.isArray(kategoriData) ? kategoriData : []);
+    } catch (error) {
+      console.error('Error fetching jadwal:', error);
+      setJadwal([]);
+      setKategori([]);
     }
   };
 
@@ -82,6 +108,59 @@ const Home = () => {
       prevIndex === 0 ? galleryImages.length - 1 : prevIndex - 1
     );
   };
+
+  const getDaysInMonth = (date) => {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const daysInMonth = lastDay.getDate();
+    const startingDayOfWeek = firstDay.getDay();
+    
+    const days = [];
+    for (let i = 0; i < startingDayOfWeek; i++) {
+      days.push(null);
+    }
+    for (let i = 1; i <= daysInMonth; i++) {
+      days.push(new Date(year, month, i));
+    }
+    return days;
+  };
+
+  const getEventsForDate = (date) => {
+    if (!date) return [];
+    const dateYear = date.getFullYear();
+    const dateMonth = date.getMonth();
+    const dateDay = date.getDate();
+    
+    return jadwal.filter(event => {
+      const eventDate = new Date(event.tanggal);
+      const eventYear = eventDate.getFullYear();
+      const eventMonth = eventDate.getMonth();
+      const eventDay = eventDate.getDate();
+      
+      return eventYear === dateYear && eventMonth === dateMonth && eventDay === dateDay;
+    });
+  };
+
+  const isToday = (date) => {
+    if (!date) return false;
+    const today = new Date();
+    return date.getFullYear() === today.getFullYear() &&
+           date.getMonth() === today.getMonth() &&
+           date.getDate() === today.getDate();
+  };
+
+  const navigateMonth = (direction) => {
+    setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + direction, 1));
+  };
+
+  const monthNames = [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
+  ];
+
+  const dayNames = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
   return (
     <div>
       <section 
@@ -248,6 +327,88 @@ const Home = () => {
             >
               Lihat Semua Kegiatan
             </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">Kalender Kegiatan</h2>
+            <p className="text-lg text-gray-600">Jadwal kegiatan dan acara di vihara kami</p>
+          </div>
+
+          <div className="bg-white rounded-lg shadow-lg p-6 mb-12">
+            <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+              <h3 className="text-2xl font-bold text-gray-900">
+                {monthNames[currentDate.getMonth()]} {currentDate.getFullYear()}
+              </h3>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => navigateMonth(-1)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                >
+                  ← Previous
+                </button>
+                <button
+                  onClick={() => navigateMonth(1)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+                >
+                  Next →
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-7 gap-1 bg-gray-200 border border-gray-200 rounded-lg overflow-hidden">
+              {dayNames.map(day => (
+                <div
+                  key={day}
+                  className="bg-gray-100 p-2 text-center font-semibold text-sm text-gray-700"
+                >
+                  {day}
+                </div>
+              ))}
+              {getDaysInMonth(currentDate).map((date, index) => {
+                const events = getEventsForDate(date);
+                const today = isToday(date);
+                return (
+                  <div
+                    key={index}
+                    className={`bg-white min-h-[80px] p-2 border border-gray-200 ${
+                      today ? 'bg-blue-50 border-blue-300 border-2' : ''
+                    }`}
+                  >
+                    {date && (
+                      <>
+                        <div className={`font-semibold mb-1 ${today ? 'text-blue-600' : 'text-gray-900'}`}>
+                          {date.getDate()}
+                        </div>
+                        <div className="flex flex-col gap-1">
+                          {events.slice(0, 2).map((event) => (
+                            <div
+                              key={event._id}
+                              className="text-xs px-2 py-1 rounded text-white truncate"
+                              style={{
+                                backgroundColor: event.kategori?.warna || '#3b82f6'
+                              }}
+                              title={event.judul}
+                            >
+                              {event.waktuMulai ? `${event.waktuMulai.substring(0, 5)} ` : ''}
+                              {event.judul.length > 15 ? event.judul.substring(0, 15) + '...' : event.judul}
+                            </div>
+                          ))}
+                          {events.length > 2 && (
+                            <div className="text-xs text-gray-500">
+                              +{events.length - 2} more
+                            </div>
+                          )}
+                        </div>
+                      </>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
       </section>
