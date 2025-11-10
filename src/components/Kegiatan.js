@@ -67,6 +67,14 @@ const Kegiatan = () => {
       });
 
   const handleRegistrationClick = (activity) => {
+    if (activity.status !== 'sedang_berlangsung') {
+      if (activity.status === 'akan_datang') {
+        alert('Pendaftaran belum dibuka. Kegiatan ini akan datang.');
+      } else if (activity.status === 'selesai') {
+        alert('Kegiatan ini sudah selesai.');
+      }
+      return;
+    }
     setSelectedActivity(activity);
     setShowRegistrationForm(true);
   };
@@ -251,10 +259,18 @@ const Kegiatan = () => {
               <div className="flex justify-end">
                 <button 
                   onClick={() => handleRegistrationClick(activity)}
-                  className="bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 transition-colors"
-                  disabled={activity.status === 'selesai'}
+                  className={`px-4 py-2 rounded-lg transition-colors ${
+                    activity.status === 'sedang_berlangsung'
+                      ? 'bg-orange-600 text-white hover:bg-orange-700'
+                      : 'bg-gray-300 text-gray-600 cursor-not-allowed'
+                  }`}
+                  disabled={activity.status !== 'sedang_berlangsung'}
                 >
-                  {activity.status === 'selesai' ? 'Selesai' : 'Daftar'}
+                  {activity.status === 'sedang_berlangsung' 
+                    ? 'Daftar' 
+                    : activity.status === 'akan_datang' 
+                    ? 'Akan Datang' 
+                    : 'Selesai'}
                 </button>
               </div>
             </div>
