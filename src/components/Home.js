@@ -5,7 +5,6 @@ const Home = () => {
   const [activities, setActivities] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
   const [jadwal, setJadwal] = useState([]);
-  const [kategori, setKategori] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -18,7 +17,7 @@ const Home = () => {
 
   useEffect(() => {
     fetchJadwal();
-  }, [currentDate]);
+  }, [fetchJadwal]);
 
   const fetchActivities = async () => {
     try {
@@ -52,24 +51,18 @@ const Home = () => {
     }
   };
 
-  const fetchJadwal = async () => {
+  const fetchJadwal = React.useCallback(async () => {
     try {
       const year = currentDate.getFullYear();
       const month = currentDate.getMonth() + 1;
-      const [jadwalRes, kategoriRes] = await Promise.all([
-        fetch(`https://finalbackend-ochre.vercel.app/api/jadwal?year=${year}&month=${month}`),
-        fetch('https://finalbackend-ochre.vercel.app/api/kategori-jadwal')
-      ]);
+      const jadwalRes = await fetch(`https://finalbackend-ochre.vercel.app/api/jadwal?year=${year}&month=${month}`);
       const jadwalData = await jadwalRes.json();
-      const kategoriData = await kategoriRes.json();
       setJadwal(Array.isArray(jadwalData) ? jadwalData : []);
-      setKategori(Array.isArray(kategoriData) ? kategoriData : []);
     } catch (error) {
       console.error('Error fetching jadwal:', error);
       setJadwal([]);
-      setKategori([]);
     }
-  };
+  }, [currentDate]);
 
   const handleActivityClick = (activityId) => {
     // Navigate to kegiatan page with the activity ID as a parameter
