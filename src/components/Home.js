@@ -10,6 +10,19 @@ const Home = () => {
   const [currentDate, setCurrentDate] = useState(new Date());
   const navigate = useNavigate();
 
+  const fetchJadwal = React.useCallback(async () => {
+    try {
+      const year = currentDate.getFullYear();
+      const month = currentDate.getMonth() + 1;
+      const jadwalRes = await fetch(`https://finalbackend-ochre.vercel.app/api/jadwal?year=${year}&month=${month}`);
+      const jadwalData = await jadwalRes.json();
+      setJadwal(Array.isArray(jadwalData) ? jadwalData : []);
+    } catch (error) {
+      console.error('Error fetching jadwal:', error);
+      setJadwal([]);
+    }
+  }, [currentDate]);
+
   useEffect(() => {
     fetchActivities();
     fetchGalleryImages();
@@ -50,19 +63,6 @@ const Home = () => {
       setLoading(false);
     }
   };
-
-  const fetchJadwal = React.useCallback(async () => {
-    try {
-      const year = currentDate.getFullYear();
-      const month = currentDate.getMonth() + 1;
-      const jadwalRes = await fetch(`https://finalbackend-ochre.vercel.app/api/jadwal?year=${year}&month=${month}`);
-      const jadwalData = await jadwalRes.json();
-      setJadwal(Array.isArray(jadwalData) ? jadwalData : []);
-    } catch (error) {
-      console.error('Error fetching jadwal:', error);
-      setJadwal([]);
-    }
-  }, [currentDate]);
 
   const handleActivityClick = (activityId) => {
     // Navigate to kegiatan page with the activity ID as a parameter
