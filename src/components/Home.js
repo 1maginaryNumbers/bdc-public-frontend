@@ -8,6 +8,8 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [selectedDate, setSelectedDate] = useState(null);
+  const [selectedDateEvents, setSelectedDateEvents] = useState([]);
   const navigate = useNavigate();
 
   const fetchJadwal = React.useCallback(async () => {
@@ -146,6 +148,27 @@ const Home = () => {
 
   const navigateMonth = (direction) => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() + direction, 1));
+  };
+
+  const handleDateClick = (date) => {
+    if (!date) return;
+    const events = getEventsForDate(date);
+    setSelectedDate(date);
+    setSelectedDateEvents(events);
+  };
+
+  const closeDateModal = () => {
+    setSelectedDate(null);
+    setSelectedDateEvents([]);
+  };
+
+  const formatDate = (date) => {
+    return date.toLocaleDateString('id-ID', {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
   };
 
   const monthNames = [
@@ -367,9 +390,10 @@ const Home = () => {
                 return (
                   <div
                     key={index}
-                    className={`bg-white min-h-[80px] p-2 border border-gray-200 ${
+                    onClick={() => handleDateClick(date)}
+                    className={`bg-white min-h-[80px] p-2 border border-gray-200 cursor-pointer transition-all hover:bg-gray-50 ${
                       today ? 'bg-blue-50 border-blue-300 border-2' : ''
-                    }`}
+                    } ${events.length > 0 ? 'hover:shadow-md' : ''}`}
                   >
                     {date && (
                       <>
@@ -405,6 +429,98 @@ const Home = () => {
           </div>
         </div>
       </section>
+
+      {/* Date Details Modal */}
+      {selectedDate && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-end md:items-center justify-center p-4"
+          onClick={closeDateModal}
+        >
+          <div 
+            className="bg-white rounded-t-2xl md:rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+              <h3 className="text-xl font-bold text-gray-900">
+                {formatDate(selectedDate)}
+              </h3>
+              <button
+                onClick={closeDateModal}
+                className="text-gray-500 hover:text-gray-700 text-2xl font-bold"
+              >
+                ×
+              </button>
+            </div>
+            
+            <div className="p-6">
+              {selectedDateEvents.length === 0 ? (
+                <div className="text-center py-12">
+                  <div className="text-6xl mb-4">📅</div>
+                  <p className="text-gray-600 text-lg">Tidak ada kegiatan pada tanggal ini</p>
+                </div>
+              ) : (
+                <div className="space-y-4">
+                  {selectedDateEvents.map((event) => (
+                    <div
+                      key={event._id}
+                      className="border border-gray-200 rounded-lg p-4 hover:shadow-md transition-shadow"
+                      style={{
+                        borderLeft: `4px solid ${event.kategori?.warna || '#3b82f6'}`
+                      }}
+                    >
+                      <div className="flex items-start justify-between mb-2">
+                        <h4 className="text-lg font-semibold text-gray-900 flex-1">
+                          {event.judul}
+                        </h4>
+                        {event.kategori && (
+                          <span
+                            className="px-3 py-1 rounded-full text-xs font-medium text-white ml-2"
+                            style={{
+                              backgroundColor: event.kategori.warna || '#3b82f6'
+                            }}
+                          >
+                            {event.kategori.nama || 'Umum'}
+                          </span>
+                        )}
+                      </div>
+                      
+                      {event.deskripsi && (
+                        <p className="text-gray-600 mb-3 text-sm">
+                          {event.deskripsi}
+                        </p>
+                      )}
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
+                        {event.waktuMulai && (
+                          <div className="flex items-center text-gray-600">
+                            <span className="mr-2">🕐</span>
+                            <span>
+                              {event.waktuMulai}
+                              {event.waktuSelesai ? ` - ${event.waktuSelesai}` : ''}
+                            </span>
+                          </div>
+                        )}
+                        {event.tempat && (
+                          <div className="flex items-center text-gray-600">
+                            <span className="mr-2">📍</span>
+                            <span>{event.tempat}</span>
+                          </div>
+                        )}
+                        {event.kapasitas && (
+                          <div className="flex items-center text-gray-600">
+                            <span className="mr-2">👥</span>
+                            <span>Kapasitas: {event.kapasitas} orang</span>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <section className="py-20 bg-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
