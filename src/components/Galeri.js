@@ -4,6 +4,7 @@ const Galeri = () => {
   const [galleryImages, setGalleryImages] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedCategory, setSelectedCategory] = useState('Semua');
+  const [categories, setCategories] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [pagination, setPagination] = useState({
     currentPage: 1,
@@ -13,6 +14,17 @@ const Galeri = () => {
     hasNextPage: false,
     hasPrevPage: false
   });
+
+  const fetchCategories = useCallback(async () => {
+    try {
+      const response = await fetch('https://finalbackend-ochre.vercel.app/api/kategori-galeri');
+      const data = await response.json();
+      setCategories(Array.isArray(data) ? data : []);
+    } catch (error) {
+      console.error('Error fetching categories:', error);
+      setCategories([]);
+    }
+  }, []);
 
   const fetchGalleryImages = useCallback(async () => {
     try {
@@ -29,14 +41,19 @@ const Galeri = () => {
   }, [currentPage]);
 
   useEffect(() => {
+    fetchCategories();
+  }, [fetchCategories]);
+
+  useEffect(() => {
     fetchGalleryImages();
   }, [fetchGalleryImages]);
 
-  const categories = ['Semua', 'Ibadah', 'Pendidikan', 'Kegiatan', 'Pelayanan', 'Sakramen'];
-
   const filteredImages = selectedCategory === 'Semua' 
     ? galleryImages 
-    : galleryImages.filter(img => img.kategori === selectedCategory);
+    : galleryImages.filter(img => {
+        const imgKategori = img.kategori?.toLowerCase() || '';
+        return imgKategori === selectedCategory.toLowerCase();
+      });
 
   const handlePageChange = (page) => {
     setCurrentPage(page);
@@ -45,7 +62,7 @@ const Galeri = () => {
 
   const handleCategoryChange = (category) => {
     setSelectedCategory(category);
-    setCurrentPage(1); // Reset to first page when changing category
+    setCurrentPage(1);
   };
 
   const renderPagination = () => {
@@ -151,17 +168,32 @@ const Galeri = () => {
         </div>
 
         <div className="flex flex-wrap justify-center gap-4 mb-8">
+          <button
+            onClick={() => handleCategoryChange('Semua')}
+            className={`px-6 py-2 rounded-full transition-colors ${
+              selectedCategory === 'Semua'
+                ? 'bg-blue-600 text-white'
+                : 'bg-white text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            Semua
+          </button>
           {categories.map((category) => (
             <button
-              key={category}
-              onClick={() => handleCategoryChange(category)}
-              className={`px-6 py-2 rounded-full transition-colors ${
-                selectedCategory === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-white text-gray-700 hover:bg-gray-100'
+              key={category._id}
+              onClick={() => handleCategoryChange(category.nama)}
+              className={`px-6 py-2 rounded-full transition-colors text-white ${
+                selectedCategory === category.nama
+                  ? 'opacity-100 shadow-lg'
+                  : 'opacity-90 hover:opacity-100'
               }`}
+              style={{
+                backgroundColor: selectedCategory === category.nama 
+                  ? category.warna || '#3b82f6' 
+                  : category.warna || '#3b82f6'
+              }}
             >
-              {category}
+              {category.nama}
             </button>
           ))}
         </div>
@@ -191,9 +223,21 @@ const Galeri = () => {
                 {image.deskripsi && (
                   <p className="text-sm text-gray-600 mb-2">{image.deskripsi}</p>
                 )}
-                <span className="text-sm text-blue-600 bg-blue-100 px-2 py-1 rounded-full">
-                  {image.kategori}
-                </span>
+                {(() => {
+                  const categoryObj = categories.find(cat => 
+                    cat.nama.toLowerCase() === (image.kategori || '').toLowerCase()
+                  );
+                  return (
+                    <span 
+                      className="text-sm text-white px-2 py-1 rounded-full"
+                      style={{
+                        backgroundColor: categoryObj?.warna || '#3b82f6'
+                      }}
+                    >
+                      {image.kategori || 'Umum'}
+                    </span>
+                  );
+                })()}
               </div>
             </div>
           ))}
