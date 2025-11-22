@@ -298,67 +298,109 @@ const Layout = ({ children }) => {
 
       <footer className="bg-gray-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
             <div>
-              <h3 className="text-lg sm:text-xl font-bold mb-4">
+              <h3 className="text-xl font-bold mb-6 text-white">
                 {infoUmum.judul || 'Vihara Buddhayana Dharmawira Centre'}
               </h3>
-              <p className="text-sm sm:text-base text-gray-300 mb-4">
-                {infoUmum.isi || 'Komunitas Buddha yang berdedikasi untuk melayani Dharma dan sesama.'}
-              </p>
             </div>
             
             <div>
-              <h4 className="text-base sm:text-lg font-semibold mb-4">Kontak</h4>
-              <div className="space-y-2 text-sm sm:text-base text-gray-300">
-                {infoUmum.alamat && <p>{infoUmum.alamat}</p>}
-                {infoUmum.telepon && <p>{infoUmum.telepon}</p>}
-                {infoUmum.email && <p>{infoUmum.email}</p>}
+              <h4 className="text-lg font-semibold mb-5 text-white">Kontak</h4>
+              <div className="space-y-3 text-sm text-gray-300">
+                {infoUmum.alamat && (
+                  <div className="flex items-start">
+                    <span className="mr-3 text-orange-400 mt-1">📍</span>
+                    <p className="leading-relaxed">{infoUmum.alamat}</p>
+                  </div>
+                )}
+                {infoUmum.telepon && (
+                  <div className="flex items-center">
+                    <span className="mr-3 text-orange-400">📞</span>
+                    <p>{infoUmum.telepon}</p>
+                  </div>
+                )}
+                {infoUmum.email && (
+                  <div className="flex items-center">
+                    <span className="mr-3 text-orange-400">✉️</span>
+                    <p>{infoUmum.email}</p>
+                  </div>
+                )}
                 {!infoUmum.alamat && !infoUmum.telepon && !infoUmum.email && (
                   <>
-                    <p>Jl. Vihara No. 123, Kota</p>
-                    <p>(021) 1234-5678</p>
-                    <p>info@viharabdc.com</p>
+                    <div className="flex items-start">
+                      <span className="mr-3 text-orange-400 mt-1">📍</span>
+                      <p>Jl. Vihara No. 123, Kota</p>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="mr-3 text-orange-400">📞</span>
+                      <p>(021) 1234-5678</p>
+                    </div>
+                    <div className="flex items-center">
+                      <span className="mr-3 text-orange-400">✉️</span>
+                      <p>info@viharabdc.com</p>
+                    </div>
                   </>
                 )}
               </div>
             </div>
             
             <div>
-              <h4 className="text-base sm:text-lg font-semibold mb-4">Jam Operasional</h4>
+              <h4 className="text-lg font-semibold mb-5 text-white">Jam Operasional</h4>
               {infoUmum.jamOperasional && infoUmum.jamOperasional.length > 0 ? (
-                <div className="space-y-2 text-sm sm:text-base text-gray-300">
+                <div className="space-y-2.5 text-sm text-gray-300">
                   {infoUmum.jamOperasional.map((jam, index) => {
                     const dayNames = formatDayNames(jam.hari);
                     if (!dayNames) return null;
                     return (
-                      <p key={index}>
-                        {dayNames}: {jam.tutup ? 'Tutup' : `${jam.jamBuka} - ${jam.jamTutup}`}
-                      </p>
+                      <div key={index} className="flex justify-between items-center">
+                        <span className="text-gray-300">{dayNames}:</span>
+                        <span className={`font-medium ${jam.tutup ? 'text-red-400' : 'text-gray-100'}`}>
+                          {jam.tutup ? 'Tutup' : `${jam.jamBuka} - ${jam.jamTutup}`}
+                        </span>
+                      </div>
                     );
                   })}
                 </div>
               ) : (
-                <div className="space-y-2 text-sm sm:text-base text-gray-300">
-                  <p>Minggu: 08.00, 10.00, 19.00</p>
-                  <p>Harian: 06.00, 18.00</p>
-                  <p>Sabtu: 18.00</p>
+                <div className="space-y-2.5 text-sm text-gray-300">
+                  <div className="flex justify-between items-center">
+                    <span>Minggu:</span>
+                    <span className="text-gray-100 font-medium">08.00, 10.00, 19.00</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Harian:</span>
+                    <span className="text-gray-100 font-medium">06.00, 18.00</span>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Sabtu:</span>
+                    <span className="text-gray-100 font-medium">18.00</span>
+                  </div>
                 </div>
               )}
             </div>
             
             <div>
-              <h4 className="text-base sm:text-lg font-semibold mb-4">Ikuti Kami</h4>
-              <div className="space-y-2 text-sm sm:text-base text-gray-300">
-                <p>Facebook: Vihara BDC</p>
-                <p>Instagram: @viharabdc</p>
-                <p>YouTube: Vihara BDC Channel</p>
+              <h4 className="text-lg font-semibold mb-5 text-white">Ikuti Kami</h4>
+              <div className="space-y-3 text-sm text-gray-300">
+                <div className="flex items-center">
+                  <span className="mr-3 text-orange-400">📘</span>
+                  <p>Facebook: Vihara BDC</p>
+                </div>
+                <div className="flex items-center">
+                  <span className="mr-3 text-orange-400">📷</span>
+                  <p>Instagram: @viharabdc</p>
+                </div>
+                <div className="flex items-center">
+                  <span className="mr-3 text-orange-400">📺</span>
+                  <p>YouTube: Vihara BDC Channel</p>
+                </div>
               </div>
             </div>
           </div>
           
-          <div className="border-t border-gray-700 mt-8 pt-8 text-center">
-            <p className="text-xs sm:text-sm text-gray-300">&copy; 2024 Vihara Buddhayana Dharmawira Centre. Semua hak dilindungi.</p>
+          <div className="border-t border-gray-700 mt-10 pt-8 text-center">
+            <p className="text-xs sm:text-sm text-gray-400">&copy; 2024 Vihara Buddhayana Dharmawira Centre. Semua hak dilindungi.</p>
           </div>
         </div>
       </footer>
