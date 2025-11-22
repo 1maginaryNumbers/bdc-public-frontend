@@ -1,55 +1,80 @@
-# BDC Public Website
+# 🌐 BDC Public Website
 
 React-based public-facing website for the Vihara (Buddhist temple). This is the website that temple visitors and members can access to view temple information, events, announcements, and make donations.
 
-## Features
+---
 
-- **Home Page**: Welcome page with temple information
-- **Announcements**: View temple announcements and updates
-- **Events**: Browse upcoming temple events and activities
-- **Gallery**: View temple photos organized by categories
-- **Donations**: Make donations through Midtrans payment integration
-- **Merchandise**: Browse and view temple merchandise
-- **Organizational Structure**: View temple leadership and organizational structure
-- **About Us**: Learn about the temple
+## ⭐ About the Project
 
-## Prerequisites
+**BDC Public Website** is a modern, responsive website designed to assist:
 
-- Node.js (v14 or higher)
-- npm or yarn
-- Backend API server running (see backend README)
+- **Temple Visitors** 👥 - Access event information, schedules, and temple details
+- **Congregation Members** 🙏 - View announcements, events, and gallery
+- **Donors** 💰 - Make secure donations through integrated payment gateway
 
-## Installation
+This website serves as the public face of the Vihara, providing a one-stop destination for all temple-related information and services.
 
-1. Clone the repository:
+---
+
+## 🚀 Features
+
+- 🏠 **Home Page** - Welcome page with temple information
+- 📢 **Announcements** - View temple announcements and updates
+- 📅 **Events** - Browse upcoming temple events and activities
+- 🖼️ **Gallery** - View temple photos organized by categories
+- 💳 **Donations** - Make donations through Midtrans payment integration
+- 🛍️ **Merchandise** - Browse and view temple merchandise
+- 🏛️ **Organizational Structure** - View temple leadership and organizational structure
+- ℹ️ **About Us** - Learn about the temple
+
+---
+
+## 🔧 Technologies Used
+
+- **Frontend**: React 19.2.0
+- **Routing**: React Router DOM 7.9.4
+- **Icons**: React Icons 5.2.1
+- **Styling**: Tailwind CSS 3.4.0
+- **HTTP Client**: Axios
+- **Hosting**: Vercel
+
+---
+
+## 📦 Installation & Setup
+
+1. **Clone the repository**:
    ```bash
    git clone <repository-url>
    cd frontend-public
    ```
 
-2. Install dependencies:
+2. **Install dependencies**:
    ```bash
    npm install
    ```
 
-3. Create a `.env` file in the root directory:
-   ```
+3. **Create a `.env` file** in the root directory:
+   ```env
    REACT_APP_API_URL=http://localhost:5000
    ```
 
    For production:
-   ```
+   ```env
    REACT_APP_API_URL=https://your-backend-url.com
    ```
 
-4. Start the development server:
+   ⚠️ **Important**: Never commit the `.env` file to version control. It is already included in `.gitignore`.
+
+4. **Start the development server**:
    ```bash
    npm start
    ```
 
-   The app will open at [http://localhost:3000](http://localhost:3000)
+   Then, open `http://localhost:3000` in your browser.
 
-## Available Scripts
+---
+
+## 📜 Available Scripts
 
 ### `npm start`
 Runs the app in development mode. The page will reload when you make changes.
@@ -63,17 +88,9 @@ Launches the test runner in interactive watch mode.
 ### `npm run eject`
 **Note: This is a one-way operation.** Ejects from Create React App configuration.
 
-## Environment Variables
+---
 
-Create a `.env` file in the root directory:
-
-```
-REACT_APP_API_URL=http://localhost:5000
-```
-
-**Important**: Never commit the `.env` file to version control. It is already included in `.gitignore`.
-
-## Project Structure
+## 🗂️ Project Structure
 
 ```
 frontend-public/
@@ -97,38 +114,36 @@ frontend-public/
 └── package.json
 ```
 
-## Key Features
+---
 
-### Responsive Design
+## ✨ Key Features
+
+### 📱 Responsive Design
 - Built with Tailwind CSS for responsive layouts
 - Mobile-friendly interface
 - Modern and clean design
 
-### Donation System
+### 💳 Donation System
 - View active donation events
 - Make donations through Midtrans payment gateway
 - Support for QRIS payment method
 - Real-time transaction status updates
 
-### Content Display
+### 📄 Content Display
 - Dynamic content loading from backend API
 - Image galleries with category filtering
 - Event listings with details
 - Announcement feed
 
-## Technologies Used
+---
 
-- React 19.2.0
-- React Router DOM 7.9.4
-- React Icons 5.2.1
-- Tailwind CSS 3.4.0
-- Axios for API calls
-
-## Styling
+## 🎨 Styling
 
 This project uses Tailwind CSS for styling. The configuration is in `tailwind.config.js`.
 
-## Deployment
+---
+
+## 🚀 Deployment
 
 ### Build for Production
 
@@ -140,23 +155,31 @@ This creates an optimized production build in the `build` folder.
 
 ### Deploy to Vercel
 
-1. Install Vercel CLI:
+1. **Install Vercel CLI**:
    ```bash
    npm i -g vercel
    ```
 
-2. Deploy:
+2. **Deploy**:
    ```bash
    vercel
    ```
 
-3. Set environment variables in Vercel dashboard:
+3. **Set environment variables in Vercel dashboard**:
    - `REACT_APP_API_URL`: Your backend API URL
 
-## Notes
+---
+
+## 📝 Notes
 
 - The public website does not require authentication
 - All content is fetched from the backend API
 - Payment integration uses Midtrans for secure transactions
 - Images are served from the backend uploads directory
 - The website is optimized for SEO and performance
+
+---
+
+## 📄 License
+
+This project is created and maintained by Vihara Buddhayana Dharmawira Centre. Licensing details are yet to be determined.

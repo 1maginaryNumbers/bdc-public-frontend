@@ -6,8 +6,6 @@ const Donasi = () => {
   const [sumbangan, setSumbangan] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSumbangan, setSelectedSumbangan] = useState(null);
-  const [showQRISModal, setShowQRISModal] = useState(false);
-  const [selectedQRIS, setSelectedQRIS] = useState(null);
   const [formData, setFormData] = useState({
     sumbangan: '',
     name: '',
@@ -81,20 +79,6 @@ const Donasi = () => {
 
   const handleAmountClick = (amount) => {
     setFormData(prev => ({ ...prev, amount: amount.toString() }));
-  };
-
-  const getQRISImageUrl = (sumbanganId) => {
-    return `${API_URL}/api/sumbangan/${sumbanganId}/qris-image`;
-  };
-
-  const openQRISModal = (sumbanganItem) => {
-    setSelectedQRIS(sumbanganItem);
-    setShowQRISModal(true);
-  };
-
-  const closeQRISModal = () => {
-    setShowQRISModal(false);
-    setSelectedQRIS(null);
   };
 
   const formatCurrency = (amount) => {
@@ -330,27 +314,6 @@ const Donasi = () => {
                 {isSubmitting ? 'Memproses...' : 'Kirim Donasi'}
               </button>
             </form>
-
-            {selectedSumbangan && selectedSumbangan.qrisImage && (
-              <div className="mt-6 bg-white rounded-lg p-6 shadow-md">
-                <h3 className="text-xl font-semibold text-gray-900 mb-4">QRIS Payment</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Scan QRIS di bawah ini untuk melakukan pembayaran langsung:
-                </p>
-                <div className="flex justify-center">
-                  <img
-                    src={getQRISImageUrl(selectedSumbangan._id)}
-                    alt="QRIS"
-                    onClick={() => openQRISModal(selectedSumbangan)}
-                    className="cursor-pointer hover:opacity-80 transition-opacity max-w-xs"
-                    style={{ maxHeight: '300px' }}
-                  />
-                </div>
-                <p className="text-xs text-gray-500 mt-2 text-center">
-                  Klik gambar untuk memperbesar
-                </p>
-              </div>
-            )}
           </div>
 
           <div>
@@ -453,41 +416,6 @@ const Donasi = () => {
           </div>
         </div>
       </div>
-
-      {showQRISModal && selectedQRIS && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-          <div className="bg-white rounded-lg max-w-md w-full p-6">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-semibold text-gray-900">QRIS Payment</h3>
-              <button
-                onClick={closeQRISModal}
-                className="text-gray-500 hover:text-gray-700 text-2xl"
-              >
-                ×
-              </button>
-            </div>
-            <div className="text-center">
-              <img
-                src={getQRISImageUrl(selectedQRIS._id)}
-                alt="QRIS"
-                className="mx-auto max-w-full"
-                style={{ maxHeight: '400px' }}
-              />
-              <p className="mt-4 text-sm text-gray-600">
-                Scan QRIS ini dengan aplikasi e-wallet atau mobile banking Anda
-              </p>
-            </div>
-            <div className="mt-6">
-              <button
-                onClick={closeQRISModal}
-                className="w-full bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors"
-              >
-                Tutup
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 };
