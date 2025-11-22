@@ -1,10 +1,56 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FiMenu, FiX } from 'react-icons/fi';
+
+const API_URL = process.env.REACT_APP_API_URL || 'https://finalbackend-ochre.vercel.app';
 
 const Layout = ({ children }) => {
   const location = useLocation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [infoUmum, setInfoUmum] = useState({
+    judul: '',
+    isi: '',
+    alamat: '',
+    telepon: '',
+    email: '',
+    jamOperasional: []
+  });
+
+  useEffect(() => {
+    fetchInfoUmum();
+  }, []);
+
+  const fetchInfoUmum = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/info-umum`);
+      if (response.ok) {
+        const data = await response.json();
+        setInfoUmum({
+          judul: data.judul || '',
+          isi: data.isi || '',
+          alamat: data.alamat || '',
+          telepon: data.telepon || '',
+          email: data.email || '',
+          jamOperasional: data.jamOperasional || []
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching info umum:', error);
+    }
+  };
+
+  const formatDayName = (hari) => {
+    const dayMap = {
+      'senin': 'Senin',
+      'selasa': 'Selasa',
+      'rabu': 'Rabu',
+      'kamis': 'Kamis',
+      'jumat': 'Jumat',
+      'sabtu': 'Sabtu',
+      'minggu': 'Minggu'
+    };
+    return dayMap[hari] || hari;
+  };
 
   const isActive = (path) => {
     return location.pathname === path;
@@ -225,28 +271,47 @@ const Layout = ({ children }) => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
             <div>
-              <h3 className="text-lg sm:text-xl font-bold mb-4">Vihara Buddhayana Dharmawira Centre</h3>
+              <h3 className="text-lg sm:text-xl font-bold mb-4">
+                {infoUmum.judul || 'Vihara Buddhayana Dharmawira Centre'}
+              </h3>
               <p className="text-sm sm:text-base text-gray-300 mb-4">
-                Komunitas Buddha yang berdedikasi untuk melayani Dharma dan sesama.
+                {infoUmum.isi || 'Komunitas Buddha yang berdedikasi untuk melayani Dharma dan sesama.'}
               </p>
             </div>
             
             <div>
               <h4 className="text-base sm:text-lg font-semibold mb-4">Kontak</h4>
               <div className="space-y-2 text-sm sm:text-base text-gray-300">
-                <p>Jl. Vihara No. 123, Kota</p>
-                <p>(021) 1234-5678</p>
-                <p>info@viharabdc.com</p>
+                {infoUmum.alamat && <p>{infoUmum.alamat}</p>}
+                {infoUmum.telepon && <p>{infoUmum.telepon}</p>}
+                {infoUmum.email && <p>{infoUmum.email}</p>}
+                {!infoUmum.alamat && !infoUmum.telepon && !infoUmum.email && (
+                  <>
+                    <p>Jl. Vihara No. 123, Kota</p>
+                    <p>(021) 1234-5678</p>
+                    <p>info@viharabdc.com</p>
+                  </>
+                )}
               </div>
             </div>
             
             <div>
-              <h4 className="text-base sm:text-lg font-semibold mb-4">Jadwal Puja</h4>
-              <div className="space-y-2 text-sm sm:text-base text-gray-300">
-                <p>Minggu: 08.00, 10.00, 19.00</p>
-                <p>Harian: 06.00, 18.00</p>
-                <p>Sabtu: 18.00</p>
-              </div>
+              <h4 className="text-base sm:text-lg font-semibold mb-4">Jam Operasional</h4>
+              {infoUmum.jamOperasional && infoUmum.jamOperasional.length > 0 ? (
+                <div className="space-y-2 text-sm sm:text-base text-gray-300">
+                  {infoUmum.jamOperasional.map((jam, index) => (
+                    <p key={index}>
+                      {formatDayName(jam.hari)}: {jam.tutup ? 'Tutup' : `${jam.jamBuka} - ${jam.jamTutup}`}
+                    </p>
+                  ))}
+                </div>
+              ) : (
+                <div className="space-y-2 text-sm sm:text-base text-gray-300">
+                  <p>Minggu: 08.00, 10.00, 19.00</p>
+                  <p>Harian: 06.00, 18.00</p>
+                  <p>Sabtu: 18.00</p>
+                </div>
+              )}
             </div>
             
             <div>

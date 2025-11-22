@@ -13,10 +13,55 @@ const AboutUs = () => {
   });
   const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: '' });
   const [captchaError, setCaptchaError] = useState('');
+  const [infoUmum, setInfoUmum] = useState({
+    judul: '',
+    alamat: '',
+    telepon: '',
+    email: '',
+    sejarah: '',
+    visi: '',
+    misi: '',
+    jamOperasional: []
+  });
 
   useEffect(() => {
     generateCaptcha();
+    fetchInfoUmum();
   }, []);
+
+  const fetchInfoUmum = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/info-umum`);
+      if (response.ok) {
+        const data = await response.json();
+        setInfoUmum({
+          judul: data.judul || '',
+          alamat: data.alamat || '',
+          telepon: data.telepon || '',
+          email: data.email || '',
+          sejarah: data.sejarah || '',
+          visi: data.visi || '',
+          misi: data.misi || '',
+          jamOperasional: data.jamOperasional || []
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching info umum:', error);
+    }
+  };
+
+  const formatDayName = (hari) => {
+    const dayMap = {
+      'senin': 'Senin',
+      'selasa': 'Selasa',
+      'rabu': 'Rabu',
+      'kamis': 'Kamis',
+      'jumat': 'Jumat',
+      'sabtu': 'Sabtu',
+      'minggu': 'Minggu'
+    };
+    return dayMap[hari] || hari;
+  };
 
   const generateCaptcha = () => {
     const num1 = Math.floor(Math.random() * 10) + 1;
@@ -94,7 +139,7 @@ const AboutUs = () => {
             Tentang Kami
           </h1>
           <p className="text-xl md:text-2xl text-blue-100 max-w-3xl mx-auto">
-            Vihara Buddhayana Dharmawira Centre (BDC) adalah komunitas Buddha yang berdedikasi untuk melayani Dharma dan sesama.
+            {infoUmum.judul || 'Vihara Buddhayana Dharmawira Centre (BDC) adalah komunitas Buddha yang berdedikasi untuk melayani Dharma dan sesama.'}
           </p>
         </div>
       </div>
@@ -109,15 +154,23 @@ const AboutUs = () => {
               <h2 className="text-3xl font-bold text-gray-900 mb-6">
                 Sejarah Vihara BDC
               </h2>
-              <p className="text-lg text-gray-600 mb-6">
-                Vihara Buddhayana Dharmawira Centre didirikan pada tahun 1995 dengan tujuan untuk menyediakan tempat ibadah dan pembelajaran Buddha Dharma yang nyaman bagi umat Buddha di wilayah ini.
-              </p>
-              <p className="text-lg text-gray-600 mb-6">
-                Sejak didirikan, vihara kami telah berkembang menjadi pusat spiritual yang tidak hanya menyediakan tempat ibadah, tetapi juga berbagai program pendidikan, sosial, dan budaya yang memperkuat pemahaman Buddha Dharma.
-              </p>
-              <p className="text-lg text-gray-600">
-                Kami percaya bahwa Dharma harus dipraktikkan tidak hanya dalam ibadah, tetapi juga dalam kehidupan sehari-hari melalui pelayanan kepada sesama dan pengembangan karakter yang baik.
-              </p>
+              {infoUmum.sejarah ? (
+                <div className="text-lg text-gray-600 whitespace-pre-line">
+                  {infoUmum.sejarah}
+                </div>
+              ) : (
+                <>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Vihara Buddhayana Dharmawira Centre didirikan pada tahun 1995 dengan tujuan untuk menyediakan tempat ibadah dan pembelajaran Buddha Dharma yang nyaman bagi umat Buddha di wilayah ini.
+                  </p>
+                  <p className="text-lg text-gray-600 mb-6">
+                    Sejak didirikan, vihara kami telah berkembang menjadi pusat spiritual yang tidak hanya menyediakan tempat ibadah, tetapi juga berbagai program pendidikan, sosial, dan budaya yang memperkuat pemahaman Buddha Dharma.
+                  </p>
+                  <p className="text-lg text-gray-600">
+                    Kami percaya bahwa Dharma harus dipraktikkan tidak hanya dalam ibadah, tetapi juga dalam kehidupan sehari-hari melalui pelayanan kepada sesama dan pengembangan karakter yang baik.
+                  </p>
+                </>
+              )}
             </div>
             <div className="bg-white rounded-lg shadow-lg p-8">
               <div className="text-center">
@@ -130,14 +183,14 @@ const AboutUs = () => {
                 <div className="space-y-4 text-left">
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">Visi:</h4>
-                    <p className="text-gray-600">
-                      Menjadi pusat spiritual Buddha yang menginspirasi umat untuk hidup dalam Dharma dan melayani sesama dengan cinta kasih.
+                    <p className="text-gray-600 whitespace-pre-line">
+                      {infoUmum.visi || 'Menjadi pusat spiritual Buddha yang menginspirasi umat untuk hidup dalam Dharma dan melayani sesama dengan cinta kasih.'}
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-900 mb-2">Misi:</h4>
-                    <p className="text-gray-600">
-                      Menyediakan tempat ibadah, pendidikan Dharma, dan program sosial yang memperkuat pemahaman Buddha Dharma serta membangun persaudaraan dalam komunitas.
+                    <p className="text-gray-600 whitespace-pre-line">
+                      {infoUmum.misi || 'Menyediakan tempat ibadah, pendidikan Dharma, dan program sosial yang memperkuat pemahaman Buddha Dharma serta membangun persaudaraan dalam komunitas.'}
                     </p>
                   </div>
                 </div>
@@ -315,22 +368,24 @@ const AboutUs = () => {
                 Informasi Kontak
               </h3>
               <div className="space-y-3">
-                <div className="flex items-center">
-                  <span className="text-gray-500 mr-3">📍</span>
-                  <span className="text-gray-600">Jl. Vihara Buddhayana No. 123, Jakarta</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-gray-500 mr-3">📞</span>
-                  <span className="text-gray-600">(021) 1234-5678</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-gray-500 mr-3">✉️</span>
-                  <span className="text-gray-600">info@viharabdc.com</span>
-                </div>
-                <div className="flex items-center">
-                  <span className="text-gray-500 mr-3">🌐</span>
-                  <span className="text-gray-600">www.viharabdc.com</span>
-                </div>
+                {infoUmum.alamat && (
+                  <div className="flex items-center">
+                    <span className="text-gray-500 mr-3">📍</span>
+                    <span className="text-gray-600">{infoUmum.alamat}</span>
+                  </div>
+                )}
+                {infoUmum.telepon && (
+                  <div className="flex items-center">
+                    <span className="text-gray-500 mr-3">📞</span>
+                    <span className="text-gray-600">{infoUmum.telepon}</span>
+                  </div>
+                )}
+                {infoUmum.email && (
+                  <div className="flex items-center">
+                    <span className="text-gray-500 mr-3">✉️</span>
+                    <span className="text-gray-600">{infoUmum.email}</span>
+                  </div>
+                )}
               </div>
             </div>
             
@@ -338,29 +393,37 @@ const AboutUs = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Jam Operasional
               </h3>
-              <div className="space-y-2">
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Senin - Jumat:</span>
-                  <span className="text-gray-900 font-medium">06.00 - 21.00</span>
+              {infoUmum.jamOperasional && infoUmum.jamOperasional.length > 0 ? (
+                <div className="space-y-2">
+                  {infoUmum.jamOperasional.map((jam, index) => (
+                    <div key={index} className="flex justify-between">
+                      <span className="text-gray-600">{formatDayName(jam.hari)}:</span>
+                      {jam.tutup ? (
+                        <span className="text-red-600 font-medium">Tutup</span>
+                      ) : (
+                        <span className="text-gray-900 font-medium">
+                          {jam.jamBuka} - {jam.jamTutup}
+                        </span>
+                      )}
+                    </div>
+                  ))}
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Sabtu:</span>
-                  <span className="text-gray-900 font-medium">06.00 - 22.00</span>
+              ) : (
+                <div className="space-y-2">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Senin - Jumat:</span>
+                    <span className="text-gray-900 font-medium">06.00 - 21.00</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Sabtu:</span>
+                    <span className="text-gray-900 font-medium">06.00 - 22.00</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Minggu:</span>
+                    <span className="text-gray-900 font-medium">06.00 - 22.00</span>
+                  </div>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-600">Minggu:</span>
-                  <span className="text-gray-900 font-medium">06.00 - 22.00</span>
-                </div>
-              </div>
-              
-              <div className="mt-6">
-                <h4 className="font-semibold text-gray-900 mb-2">Jadwal Puja Khusus:</h4>
-                <div className="text-sm text-gray-600 space-y-1">
-                  <p>• Minggu: 08.00, 10.00, 19.00</p>
-                  <p>• Harian: 06.00, 18.00</p>
-                  <p>• Sabtu: 18.00</p>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
