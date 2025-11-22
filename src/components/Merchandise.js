@@ -237,30 +237,6 @@ const Merchandise = () => {
             <p className="text-gray-600">Tidak ada produk yang tersedia.</p>
           </div>
         )}
-
-        <div className="mt-16 bg-orange-50 rounded-lg p-8 text-center">
-          <h3 className="text-2xl font-bold text-gray-900 mb-4">Cara Pemesanan</h3>
-          <div className="grid md:grid-cols-3 gap-6 mb-6">
-            <div className="bg-white rounded-lg p-4">
-              <div className="text-3xl mb-2">📞</div>
-              <h4 className="font-semibold mb-2">Telepon</h4>
-              <p className="text-sm text-gray-600">Hubungi sekretariat vihara untuk pemesanan</p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <div className="text-3xl mb-2">🏪</div>
-              <h4 className="font-semibold mb-2">Kunjungi</h4>
-              <p className="text-sm text-gray-600">Datang langsung ke sekretariat vihara</p>
-            </div>
-            <div className="bg-white rounded-lg p-4">
-              <div className="text-3xl mb-2">📱</div>
-              <h4 className="font-semibold mb-2">WhatsApp</h4>
-              <p className="text-sm text-gray-600">Kirim pesan ke nomor WhatsApp vihara</p>
-            </div>
-          </div>
-          <p className="text-gray-700">
-            Semua produk dapat dipesan dengan harga yang sama. Pembayaran dapat dilakukan secara tunai atau transfer.
-          </p>
-        </div>
       </div>
 
       {showPurchaseModal && selectedProduct && (
