@@ -1,4 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+const API_URL = process.env.REACT_APP_API_URL || 'https://finalbackend-ochre.vercel.app';
 
 const AboutUs = () => {
   const [formData, setFormData] = useState({
@@ -9,6 +11,19 @@ const AboutUs = () => {
     kritikSaran: '',
     anonymous: false
   });
+  const [captcha, setCaptcha] = useState({ num1: 0, num2: 0, answer: '' });
+  const [captchaError, setCaptchaError] = useState('');
+
+  useEffect(() => {
+    generateCaptcha();
+  }, []);
+
+  const generateCaptcha = () => {
+    const num1 = Math.floor(Math.random() * 10) + 1;
+    const num2 = Math.floor(Math.random() * 10) + 1;
+    setCaptcha({ num1, num2, answer: '' });
+    setCaptchaError('');
+  };
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -21,8 +36,17 @@ const AboutUs = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    const expectedAnswer = captcha.num1 + captcha.num2;
+    const userAnswer = parseInt(captcha.answer);
+    
+    if (userAnswer !== expectedAnswer) {
+      setCaptchaError('Jawaban captcha salah. Silakan coba lagi.');
+      generateCaptcha();
+      return;
+    }
+    
     try {
-      const response = await fetch('https://finalbackend-ochre.vercel.app/api/saran', {
+      const response = await fetch(`${API_URL}/api/saran`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -33,7 +57,9 @@ const AboutUs = () => {
           nomorTelepon: formData.anonymous ? '' : formData.nomorTelepon,
           kategori: formData.kategori,
           kritikSaran: formData.kritikSaran,
-          status: 'pending'
+          status: 'pending',
+          captchaAnswer: userAnswer,
+          captchaSum: expectedAnswer
         }),
       });
 
@@ -47,12 +73,16 @@ const AboutUs = () => {
           kritikSaran: '',
           anonymous: false
         });
+        generateCaptcha();
       } else {
-        alert('Terjadi kesalahan saat mengirim kritik dan saran. Silakan coba lagi.');
+        const errorData = await response.json();
+        alert(errorData.message || 'Terjadi kesalahan saat mengirim kritik dan saran. Silakan coba lagi.');
+        generateCaptcha();
       }
     } catch (error) {
       console.error('Error submitting feedback:', error);
       alert('Terjadi kesalahan saat mengirim kritik dan saran. Silakan coba lagi.');
+      generateCaptcha();
     }
   };
   return (
@@ -224,6 +254,41 @@ const AboutUs = () => {
                   <label htmlFor="anonymous" className="ml-2 block text-sm text-gray-700">
                     Kirim sebagai anonim
                   </label>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Verifikasi Keamanan *
+                  </label>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2 bg-gray-100 px-4 py-2 rounded-lg">
+                      <span className="text-lg font-semibold text-gray-900">
+                        {captcha.num1} + {captcha.num2} = ?
+                      </span>
+                    </div>
+                    <input
+                      type="number"
+                      value={captcha.answer}
+                      onChange={(e) => {
+                        setCaptcha(prev => ({ ...prev, answer: e.target.value }));
+                        setCaptchaError('');
+                      }}
+                      required
+                      className="w-24 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      placeholder="Jawaban"
+                    />
+                    <button
+                      type="button"
+                      onClick={generateCaptcha}
+                      className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+                      title="Refresh captcha"
+                    >
+                      🔄
+                    </button>
+                  </div>
+                  {captchaError && (
+                    <p className="mt-2 text-sm text-red-600">{captchaError}</p>
+                  )}
                 </div>
                 
                 <div className="text-center">
