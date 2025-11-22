@@ -1,10 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+const API_URL = process.env.REACT_APP_API_URL || 'https://finalbackend-ochre.vercel.app';
+
 const Home = () => {
   const [activities, setActivities] = useState([]);
   const [galleryImages, setGalleryImages] = useState([]);
   const [jadwal, setJadwal] = useState([]);
+  const [infoUmum, setInfoUmum] = useState({
+    jadwalPujaBakti: []
+  });
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -28,7 +33,63 @@ const Home = () => {
   useEffect(() => {
     fetchActivities();
     fetchGalleryImages();
+    fetchInfoUmum();
   }, []);
+
+  const fetchInfoUmum = async () => {
+    try {
+      const response = await fetch(`${API_URL}/api/info-umum`);
+      if (response.ok) {
+        const data = await response.json();
+        setInfoUmum({
+          jadwalPujaBakti: data.jadwalPujaBakti || []
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching info umum:', error);
+    }
+  };
+
+  const formatDayName = (hari) => {
+    const dayMap = {
+      'senin': 'Senin',
+      'selasa': 'Selasa',
+      'rabu': 'Rabu',
+      'kamis': 'Kamis',
+      'jumat': 'Jumat',
+      'sabtu': 'Sabtu',
+      'minggu': 'Minggu'
+    };
+    return dayMap[hari] || hari;
+  };
+
+  const formatDayNames = (hariArray) => {
+    if (!Array.isArray(hariArray)) {
+      return formatDayName(hariArray);
+    }
+    if (hariArray.length === 0) return '';
+    if (hariArray.length === 1) return formatDayName(hariArray[0]);
+    if (hariArray.length === 7) return 'Setiap Hari';
+    
+    const sortedDays = hariArray.sort((a, b) => {
+      const order = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+      return order.indexOf(a) - order.indexOf(b);
+    });
+    
+    // Try to create ranges (e.g., "Senin - Jumat")
+    if (sortedDays.length >= 2) {
+      const order = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+      const firstIndex = order.indexOf(sortedDays[0]);
+      const lastIndex = order.indexOf(sortedDays[sortedDays.length - 1]);
+      
+      if (lastIndex - firstIndex + 1 === sortedDays.length) {
+        // It's a consecutive range
+        return `${formatDayName(sortedDays[0])} - ${formatDayName(sortedDays[sortedDays.length - 1])}`;
+      }
+    }
+    
+    return sortedDays.map(formatDayName).join(', ');
+  };
 
   useEffect(() => {
     fetchJadwal();
@@ -349,6 +410,43 @@ const Home = () => {
 
       <section className="py-20 bg-gray-50">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Jadwal Puja Bakti Section */}
+          {infoUmum.jadwalPujaBakti && infoUmum.jadwalPujaBakti.length > 0 && (
+            <div className="mb-16">
+              <div className="text-center mb-8">
+                <h2 className="text-4xl font-bold text-gray-900 mb-4">Jadwal Puja Bakti</h2>
+                <p className="text-lg text-gray-600">Jadwal ibadah rutin di vihara kami</p>
+              </div>
+              <div className="bg-white rounded-lg shadow-lg p-8">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {infoUmum.jadwalPujaBakti.map((jadwal, index) => {
+                    const dayNames = formatDayNames(jadwal.hari);
+                    if (!dayNames) return null;
+                    
+                    return (
+                      <div key={index} className="bg-blue-50 rounded-lg p-5 border border-blue-100 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-center flex-1">
+                            <span className="text-blue-600 mr-3 text-2xl">🕯️</span>
+                            <div className="flex-1">
+                              <h3 className="text-gray-900 font-semibold text-lg mb-1">{dayNames}</h3>
+                              {jadwal.keterangan && (
+                                <p className="text-gray-600 text-sm">{jadwal.keterangan}</p>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="ml-11">
+                          <p className="text-blue-700 font-bold text-xl">{jadwal.waktu}</p>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-gray-900 mb-4">Kalender Kegiatan</h2>
             <p className="text-lg text-gray-600">Jadwal kegiatan dan acara di vihara kami</p>
