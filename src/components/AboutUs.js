@@ -22,7 +22,8 @@ const AboutUs = () => {
     visi: '',
     misi: '',
     jamOperasional: [],
-    tanggalKhusus: []
+    tanggalKhusus: [],
+    jadwalPujaBakti: []
   });
 
   useEffect(() => {
@@ -44,7 +45,8 @@ const AboutUs = () => {
           visi: data.visi || '',
           misi: data.misi || '',
           jamOperasional: data.jamOperasional || [],
-          tanggalKhusus: data.tanggalKhusus || []
+          tanggalKhusus: data.tanggalKhusus || [],
+          jadwalPujaBakti: data.jadwalPujaBakti || []
         });
       }
     } catch (error) {
@@ -499,6 +501,33 @@ const AboutUs = () => {
                               <span className="text-gray-600 ml-2">- {tanggal.keterangan}</span>
                             )}
                           </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+              
+              {infoUmum.jadwalPujaBakti && infoUmum.jadwalPujaBakti.length > 0 && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <h4 className="font-semibold text-gray-900 mb-3">Jadwal Puja Bakti:</h4>
+                  <div className="space-y-3">
+                    {infoUmum.jadwalPujaBakti.map((jadwal, index) => {
+                      const dayNames = formatDayNames(jadwal.hari);
+                      if (!dayNames) return null;
+                      
+                      return (
+                        <div key={index} className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                          <div className="flex items-center">
+                            <span className="text-blue-600 mr-3 text-lg">🕯️</span>
+                            <div>
+                              <span className="text-gray-900 font-medium">{dayNames}</span>
+                              {jadwal.keterangan && (
+                                <span className="text-gray-600 ml-2 text-sm">- {jadwal.keterangan}</span>
+                              )}
+                            </div>
+                          </div>
+                          <span className="text-blue-700 font-semibold">{jadwal.waktu}</span>
                         </div>
                       );
                     })}
