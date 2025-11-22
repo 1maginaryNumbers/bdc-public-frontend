@@ -31,7 +31,8 @@ const Layout = ({ children }) => {
           alamat: data.alamat || '',
           telepon: data.telepon || '',
           email: data.email || '',
-          jamOperasional: data.jamOperasional || []
+          jamOperasional: data.jamOperasional || [],
+          tanggalKhusus: data.tanggalKhusus || []
         });
       }
     } catch (error) {
@@ -50,6 +51,34 @@ const Layout = ({ children }) => {
       'minggu': 'Minggu'
     };
     return dayMap[hari] || hari;
+  };
+
+  const formatDayNames = (hariArray) => {
+    if (!Array.isArray(hariArray)) {
+      return formatDayName(hariArray);
+    }
+    if (hariArray.length === 0) return '';
+    if (hariArray.length === 1) return formatDayName(hariArray[0]);
+    if (hariArray.length === 7) return 'Setiap Hari';
+    
+    const sortedDays = hariArray.sort((a, b) => {
+      const order = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+      return order.indexOf(a) - order.indexOf(b);
+    });
+    
+    // Try to create ranges (e.g., "Senin - Jumat")
+    if (sortedDays.length >= 2) {
+      const order = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+      const firstIndex = order.indexOf(sortedDays[0]);
+      const lastIndex = order.indexOf(sortedDays[sortedDays.length - 1]);
+      
+      if (lastIndex - firstIndex + 1 === sortedDays.length) {
+        // It's a consecutive range
+        return `${formatDayName(sortedDays[0])} - ${formatDayName(sortedDays[sortedDays.length - 1])}`;
+      }
+    }
+    
+    return sortedDays.map(formatDayName).join(', ');
   };
 
   const isActive = (path) => {
@@ -299,11 +328,15 @@ const Layout = ({ children }) => {
               <h4 className="text-base sm:text-lg font-semibold mb-4">Jam Operasional</h4>
               {infoUmum.jamOperasional && infoUmum.jamOperasional.length > 0 ? (
                 <div className="space-y-2 text-sm sm:text-base text-gray-300">
-                  {infoUmum.jamOperasional.map((jam, index) => (
-                    <p key={index}>
-                      {formatDayName(jam.hari)}: {jam.tutup ? 'Tutup' : `${jam.jamBuka} - ${jam.jamTutup}`}
-                    </p>
-                  ))}
+                  {infoUmum.jamOperasional.map((jam, index) => {
+                    const dayNames = formatDayNames(jam.hari);
+                    if (!dayNames) return null;
+                    return (
+                      <p key={index}>
+                        {dayNames}: {jam.tutup ? 'Tutup' : `${jam.jamBuka} - ${jam.jamTutup}`}
+                      </p>
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="space-y-2 text-sm sm:text-base text-gray-300">

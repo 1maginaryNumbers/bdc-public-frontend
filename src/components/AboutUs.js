@@ -21,7 +21,8 @@ const AboutUs = () => {
     sejarah: '',
     visi: '',
     misi: '',
-    jamOperasional: []
+    jamOperasional: [],
+    tanggalKhusus: []
   });
 
   useEffect(() => {
@@ -42,7 +43,8 @@ const AboutUs = () => {
           sejarah: data.sejarah || '',
           visi: data.visi || '',
           misi: data.misi || '',
-          jamOperasional: data.jamOperasional || []
+          jamOperasional: data.jamOperasional || [],
+          tanggalKhusus: data.tanggalKhusus || []
         });
       }
     } catch (error) {
@@ -61,6 +63,44 @@ const AboutUs = () => {
       'minggu': 'Minggu'
     };
     return dayMap[hari] || hari;
+  };
+
+  const formatDayNames = (hariArray) => {
+    if (!Array.isArray(hariArray)) {
+      return formatDayName(hariArray);
+    }
+    if (hariArray.length === 0) return '';
+    if (hariArray.length === 1) return formatDayName(hariArray[0]);
+    if (hariArray.length === 7) return 'Setiap Hari';
+    
+    const sortedDays = hariArray.sort((a, b) => {
+      const order = ['senin', 'selasa', 'rabu', 'kamis', 'jumat', 'sabtu', 'minggu'];
+      return order.indexOf(a) - order.indexOf(b);
+    });
+    
+    return sortedDays.map(formatDayName).join(', ');
+  };
+
+  const isTodayExceptional = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return infoUmum.tanggalKhusus.some(tanggal => {
+      const date = new Date(tanggal.tanggal);
+      date.setHours(0, 0, 0, 0);
+      return date.getTime() === today.getTime();
+    });
+  };
+
+  const getTodayExceptionalInfo = () => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    
+    return infoUmum.tanggalKhusus.find(tanggal => {
+      const date = new Date(tanggal.tanggal);
+      date.setHours(0, 0, 0, 0);
+      return date.getTime() === today.getTime();
+    });
   };
 
   const generateCaptcha = () => {
@@ -393,20 +433,33 @@ const AboutUs = () => {
               <h3 className="text-xl font-semibold text-gray-900 mb-4">
                 Jam Operasional
               </h3>
+              {isTodayExceptional() && (
+                <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                  <p className="text-red-800 font-semibold text-sm mb-1">⚠️ Tutup Hari Ini</p>
+                  {getTodayExceptionalInfo()?.keterangan && (
+                    <p className="text-red-700 text-sm">{getTodayExceptionalInfo().keterangan}</p>
+                  )}
+                </div>
+              )}
               {infoUmum.jamOperasional && infoUmum.jamOperasional.length > 0 ? (
                 <div className="space-y-2">
-                  {infoUmum.jamOperasional.map((jam, index) => (
-                    <div key={index} className="flex justify-between">
-                      <span className="text-gray-600">{formatDayName(jam.hari)}:</span>
-                      {jam.tutup ? (
-                        <span className="text-red-600 font-medium">Tutup</span>
-                      ) : (
-                        <span className="text-gray-900 font-medium">
-                          {jam.jamBuka} - {jam.jamTutup}
-                        </span>
-                      )}
-                    </div>
-                  ))}
+                  {infoUmum.jamOperasional.map((jam, index) => {
+                    const dayNames = formatDayNames(jam.hari);
+                    if (!dayNames) return null;
+                    
+                    return (
+                      <div key={index} className="flex justify-between">
+                        <span className="text-gray-600">{dayNames}:</span>
+                        {jam.tutup ? (
+                          <span className="text-red-600 font-medium">Tutup</span>
+                        ) : (
+                          <span className="text-gray-900 font-medium">
+                            {jam.jamBuka} - {jam.jamTutup}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
                 </div>
               ) : (
                 <div className="space-y-2">
@@ -421,6 +474,34 @@ const AboutUs = () => {
                   <div className="flex justify-between">
                     <span className="text-gray-600">Minggu:</span>
                     <span className="text-gray-900 font-medium">06.00 - 22.00</span>
+                  </div>
+                </div>
+              )}
+              
+              {infoUmum.tanggalKhusus && infoUmum.tanggalKhusus.length > 0 && (
+                <div className="mt-6 pt-6 border-t border-gray-200">
+                  <h4 className="font-semibold text-gray-900 mb-3">Tanggal Khusus (Tutup):</h4>
+                  <div className="space-y-2 text-sm">
+                    {infoUmum.tanggalKhusus.map((tanggal, index) => {
+                      const date = new Date(tanggal.tanggal);
+                      const formattedDate = date.toLocaleDateString('id-ID', { 
+                        weekday: 'long', 
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric' 
+                      });
+                      return (
+                        <div key={index} className="flex items-start">
+                          <span className="text-red-600 mr-2">📅</span>
+                          <div>
+                            <span className="text-gray-900 font-medium">{formattedDate}</span>
+                            {tanggal.keterangan && (
+                              <span className="text-gray-600 ml-2">- {tanggal.keterangan}</span>
+                            )}
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </div>
               )}
