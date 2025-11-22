@@ -349,10 +349,18 @@ const Merchandise = () => {
 
               <div className="bg-orange-50 p-4 rounded-lg">
                 <div className="flex justify-between items-center mb-2">
-                  <span className="text-sm text-gray-600">Subtotal:</span>
-                  <span className="font-semibold">{formatCurrency(selectedProduct.harga * formData.jumlah)}</span>
+                  <span className="text-sm text-gray-600">Harga per item:</span>
+                  <span className="font-semibold text-gray-900">{formatCurrency(selectedProduct.harga)}</span>
                 </div>
-                <div className="flex justify-between items-center">
+                <div className="flex justify-between items-center mb-2">
+                  <span className="text-sm text-gray-600">Jumlah:</span>
+                  <span className="font-semibold text-gray-900">{formData.jumlah} item</span>
+                </div>
+                <div className="flex justify-between items-center mb-2 pt-2 border-t border-orange-200">
+                  <span className="text-sm text-gray-600">Subtotal:</span>
+                  <span className="font-semibold text-gray-900">{formatCurrency(selectedProduct.harga * formData.jumlah)}</span>
+                </div>
+                <div className="flex justify-between items-center pt-2 border-t-2 border-orange-300">
                   <span className="text-lg font-bold text-gray-900">Total:</span>
                   <span className="text-lg font-bold text-orange-600">{formatCurrency(calculateTotal())}</span>
                 </div>
