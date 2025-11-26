@@ -182,6 +182,16 @@ const Layout = ({ children }) => {
               >
                 Donasi
               </Link>
+              <Link 
+                to="/paket-sumbangan" 
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/paket-sumbangan') 
+                    ? 'text-orange-600 bg-orange-50' 
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                Paket Sumbangan
+              </Link>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -285,6 +295,17 @@ const Layout = ({ children }) => {
                   }`}
                 >
                   Donasi
+                </Link>
+                <Link 
+                  to="/paket-sumbangan" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
+                    isActive('/paket-sumbangan') 
+                      ? 'text-orange-600 bg-orange-50' 
+                      : 'text-gray-700 active:bg-gray-100'
+                  }`}
+                >
+                  Paket Sumbangan
                 </Link>
               </div>
             </div>

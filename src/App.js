@@ -9,6 +9,7 @@ import Kegiatan from './components/Kegiatan';
 import StrukturOrganisasi from './components/StrukturOrganisasi';
 import Merchandise from './components/Merchandise';
 import Donasi from './components/Donasi';
+import PaketSumbangan from './components/PaketSumbangan';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           <Route path="/struktur" element={<StrukturOrganisasi />} />
           <Route path="/merchandise" element={<Merchandise />} />
           <Route path="/donasi" element={<Donasi />} />
+          <Route path="/paket-sumbangan" element={<PaketSumbangan />} />
         </Routes>
       </Layout>
     </Router>
