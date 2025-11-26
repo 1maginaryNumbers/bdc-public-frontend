@@ -300,55 +300,6 @@ const Donasi = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Informasi Donasi</h2>
             
             <div className="space-y-6">
-              {selectedSumbangan && (
-                <div className="bg-white rounded-lg p-6 shadow-md">
-                  <h3 className="text-xl font-semibold text-gray-900 mb-4">Program Donasi</h3>
-                  <div className="space-y-3">
-                    <div>
-                      <span className="font-medium">Nama Program:</span>
-                      <p className="text-gray-700">{selectedSumbangan.namaEvent}</p>
-                    </div>
-                    {selectedSumbangan.deskripsi && (
-                      <div>
-                        <span className="font-medium">Deskripsi:</span>
-                        <p className="text-gray-700">{selectedSumbangan.deskripsi}</p>
-                      </div>
-                    )}
-                    {selectedSumbangan.targetDana && (
-                      <div>
-                        <span className="font-medium">Target Dana:</span>
-                        <p className="text-gray-700">{formatCurrency(selectedSumbangan.targetDana)}</p>
-                      </div>
-                    )}
-                    {selectedSumbangan.danaTerkumpul !== undefined && (
-                      <div>
-                        <span className="font-medium">Dana Terkumpul:</span>
-                        <p className="text-gray-700">{formatCurrency(selectedSumbangan.danaTerkumpul || 0)}</p>
-                        {selectedSumbangan.targetDana && (
-                          <div className="mt-2">
-                            <div className="w-full bg-gray-200 rounded-full h-2.5">
-                              <div
-                                className="bg-blue-600 h-2.5 rounded-full"
-                                style={{
-                                  width: `${Math.min(
-                                    ((selectedSumbangan.danaTerkumpul || 0) / selectedSumbangan.targetDana) * 100,
-                                    100
-                                  )}%`
-                                }}
-                              ></div>
-                            </div>
-                            <p className="text-xs text-gray-500 mt-1">
-                              {Math.round(
-                                ((selectedSumbangan.danaTerkumpul || 0) / selectedSumbangan.targetDana) * 100
-                              )}% dari target
-                            </p>
-                          </div>
-                        )}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              )}
 
               <div className="bg-white rounded-lg p-6 shadow-md">
                 <h3 className="text-xl font-semibold text-gray-900 mb-4">Rekening Donasi</h3>
