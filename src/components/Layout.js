@@ -96,7 +96,7 @@ const Layout = ({ children }) => {
           <div className="flex justify-between items-center h-14 sm:h-16">
             <div className="flex items-center flex-1 min-w-0">
               <Link to="/" className="text-base sm:text-xl lg:text-2xl font-bold text-gray-900 hover:text-orange-600 transition-colors truncate">
-                Vihara BDC
+                {infoUmum.judul || 'Vihara Buddhayana Dharmawira Centre'}
               </Link>
             </div>
             
