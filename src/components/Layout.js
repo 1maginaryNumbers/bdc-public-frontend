@@ -192,6 +192,16 @@ const Layout = ({ children }) => {
               >
                 Paket Sumbangan
               </Link>
+              <Link 
+                to="/faq" 
+                className={`px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                  isActive('/faq') 
+                    ? 'text-orange-600 bg-orange-50' 
+                    : 'text-gray-700 hover:text-gray-900 hover:bg-gray-50'
+                }`}
+              >
+                FAQ
+              </Link>
             </div>
 
             {/* Mobile Menu Toggle */}
@@ -306,6 +316,17 @@ const Layout = ({ children }) => {
                   }`}
                 >
                   Paket Sumbangan
+                </Link>
+                <Link 
+                  to="/faq" 
+                  onClick={() => setIsMenuOpen(false)}
+                  className={`px-3 py-2.5 rounded-md text-base font-medium transition-colors ${
+                    isActive('/faq') 
+                      ? 'text-orange-600 bg-orange-50' 
+                      : 'text-gray-700 active:bg-gray-100'
+                  }`}
+                >
+                  FAQ
                 </Link>
               </div>
             </div>
