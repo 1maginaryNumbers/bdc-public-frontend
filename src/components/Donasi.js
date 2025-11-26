@@ -50,12 +50,12 @@ const Donasi = () => {
         sumbanganList = data.sumbangan;
       }
       
-      const activeSumbangan = sumbanganList.filter(item => item.status === 'aktif');
-      setSumbangan(activeSumbangan);
+      // Voluntary donation is always active, use the first one
+      setSumbangan(sumbanganList);
       
-      if (activeSumbangan.length > 0 && !formData.sumbangan) {
-        setFormData(prev => ({ ...prev, sumbangan: activeSumbangan[0]._id }));
-        setSelectedSumbangan(activeSumbangan[0]);
+      if (sumbanganList.length > 0 && !formData.sumbangan) {
+        setFormData(prev => ({ ...prev, sumbangan: sumbanganList[0]._id }));
+        setSelectedSumbangan(sumbanganList[0]);
       }
     } catch (error) {
       console.error('Error fetching donation events:', error);
@@ -185,32 +185,12 @@ const Donasi = () => {
             <h2 className="text-2xl font-bold text-gray-900 mb-6">Form Donasi</h2>
             <form onSubmit={handleSubmit} className="space-y-6">
               {sumbangan.length > 0 && (
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Tujuan Donasi *
-                  </label>
-                  <select
-                    name="sumbangan"
-                    value={formData.sumbangan}
-                    onChange={handleInputChange}
-                    required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  >
-                    {sumbangan.map((item) => (
-                      <option key={item._id} value={item._id}>
-                        {item.namaEvent} {item.targetDana ? `- Target: ${formatCurrency(item.targetDana)}` : ''}
-                      </option>
-                    ))}
-                  </select>
-                  {selectedSumbangan && selectedSumbangan.deskripsi && (
-                    <p className="mt-2 text-sm text-gray-600">{selectedSumbangan.deskripsi}</p>
-                  )}
-                </div>
+                <input type="hidden" name="sumbangan" value={formData.sumbangan} />
               )}
 
               {sumbangan.length === 0 && (
                 <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
-                  <p className="text-yellow-800">Tidak ada program donasi aktif saat ini.</p>
+                  <p className="text-yellow-800">QRIS donasi sedang disiapkan. Silakan coba lagi nanti.</p>
                 </div>
               )}
 
