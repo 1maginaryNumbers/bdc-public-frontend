@@ -96,7 +96,7 @@ const Layout = ({ children }) => {
           <div className="flex justify-between items-center h-14 sm:h-16">
             <div className="flex items-center flex-shrink-0">
               <Link to="/" className="text-sm sm:text-base lg:text-lg xl:text-xl font-bold text-gray-900 hover:text-orange-600 transition-colors whitespace-nowrap">
-                {'Vihara Buddhayana Dharmawira Centre'}
+                {'Vihara BDC'}
               </Link>
             </div>
             
