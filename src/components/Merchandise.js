@@ -11,8 +11,7 @@ const Merchandise = () => {
     namaPembeli: '',
     email: '',
     nomorTelepon: '',
-    jumlah: 1,
-    alamatPengiriman: ''
+    jumlah: 1
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -63,8 +62,7 @@ const Merchandise = () => {
       namaPembeli: '',
       email: '',
       nomorTelepon: '',
-      jumlah: 1,
-      alamatPengiriman: ''
+      jumlah: 1
     });
     setShowPurchaseModal(true);
   };
@@ -103,8 +101,7 @@ const Merchandise = () => {
           namaPembeli: formData.namaPembeli,
           email: formData.email || undefined,
           nomorTelepon: formData.nomorTelepon || undefined,
-          jumlah: formData.jumlah,
-          alamatPengiriman: formData.alamatPengiriman || undefined
+          jumlah: formData.jumlah
         })
       });
 
@@ -333,18 +330,10 @@ const Merchandise = () => {
                 </p>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Alamat Pengiriman
-                </label>
-                <textarea
-                  name="alamatPengiriman"
-                  value={formData.alamatPengiriman}
-                  onChange={handleInputChange}
-                  rows="3"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-orange-500"
-                  placeholder="Masukkan alamat pengiriman (opsional)"
-                />
+              <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-lg mb-4">
+                <p className="text-sm text-blue-800">
+                  <strong>Catatan:</strong> Barang harus diambil langsung di Vihara BDC dengan menunjukkan kuitansi pembayaran.
+                </p>
               </div>
 
               <div className="bg-orange-50 p-4 rounded-lg">
