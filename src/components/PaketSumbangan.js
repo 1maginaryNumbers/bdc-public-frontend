@@ -11,8 +11,7 @@ const PaketSumbangan = () => {
   const [formData, setFormData] = useState({
     namaPembeli: '',
     email: '',
-    nomorTelepon: '',
-    alamat: ''
+    nomorTelepon: ''
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -70,7 +69,6 @@ const PaketSumbangan = () => {
       namaPembeli: '',
       email: '',
       nomorTelepon: '',
-      alamat: ''
     });
     setShowModal(true);
   };
@@ -82,7 +80,6 @@ const PaketSumbangan = () => {
       namaPembeli: '',
       email: '',
       nomorTelepon: '',
-      alamat: ''
     });
   };
 
@@ -106,8 +103,7 @@ const PaketSumbangan = () => {
         paketSumbangan: selectedPaket._id,
         namaPembeli: formData.namaPembeli,
         email: formData.email,
-        nomorTelepon: formData.nomorTelepon,
-        alamat: formData.alamat
+        nomorTelepon: formData.nomorTelepon
       });
 
       if (response.data.token && window.snap) {
@@ -400,24 +396,19 @@ const PaketSumbangan = () => {
                   }}
                 />
               </div>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ display: 'block', marginBottom: '5px', fontWeight: '600', color: '#2c3e50' }}>
-                  Alamat
-                </label>
-                <textarea
-                  name="alamat"
-                  value={formData.alamat}
-                  onChange={handleInputChange}
-                  rows="3"
-                  style={{
-                    width: '100%',
-                    padding: '10px',
-                    border: '1px solid #ddd',
-                    borderRadius: '6px',
-                    fontSize: '1rem',
-                    resize: 'vertical'
-                  }}
-                />
+              <div style={{ 
+                marginBottom: '20px', 
+                padding: '15px', 
+                backgroundColor: '#e7f3ff', 
+                borderLeft: '4px solid #2196F3',
+                borderRadius: '6px'
+              }}>
+                <p style={{ margin: '0 0 10px 0', fontWeight: '600', color: '#1565C0', fontSize: '15px' }}>
+                  Informasi Pengambilan Paket
+                </p>
+                <p style={{ margin: '0', color: '#424242', fontSize: '14px', lineHeight: '1.6' }}>
+                  Paket sumbangan harus diambil langsung di Vihara BDC dengan menunjukkan kuitansi pembayaran. Setelah pembayaran berhasil, silakan datang ke Vihara BDC untuk mengambil paket Anda. Pastikan membawa kuitansi pembayaran (akan dikirim via email) dan identitas diri.
+                </p>
               </div>
               <div style={{ display: 'flex', gap: '10px' }}>
                 <button
