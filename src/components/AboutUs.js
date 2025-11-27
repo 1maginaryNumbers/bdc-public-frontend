@@ -31,6 +31,17 @@ const AboutUs = () => {
     fetchInfoUmum();
   }, []);
 
+  useEffect(() => {
+    if (window.location.hash === '#jadwal-puja') {
+      setTimeout(() => {
+        const element = document.getElementById('jadwal-puja');
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth' });
+        }
+      }, 500);
+    }
+  }, [infoUmum.jadwalPujaBakti]);
+
   const fetchInfoUmum = async () => {
     try {
       const response = await fetch(`${API_URL}/api/info-umum`);
@@ -237,6 +248,43 @@ const AboutUs = () => {
             </div>
           </div>
         </div>
+
+        {/* Jadwal Puja Bakti Section */}
+        {infoUmum.jadwalPujaBakti && infoUmum.jadwalPujaBakti.length > 0 && (
+          <div id="jadwal-puja" className="mb-16 scroll-mt-20">
+            <div className="text-center mb-8">
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">Jadwal Puja Bakti</h2>
+              <p className="text-lg text-gray-600">Jadwal ibadah rutin di vihara kami</p>
+            </div>
+            <div className="bg-white rounded-lg shadow-lg p-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {infoUmum.jadwalPujaBakti.map((jadwal, index) => {
+                  const dayNames = formatDayNames(jadwal.hari);
+                  if (!dayNames) return null;
+                  
+                  return (
+                    <div key={index} className="bg-blue-50 rounded-lg p-5 border border-blue-100 hover:shadow-md transition-shadow">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-center flex-1">
+                          <span className="text-blue-600 mr-3 text-2xl">🕯️</span>
+                          <div className="flex-1">
+                            <h3 className="text-gray-900 font-semibold text-lg mb-1">{dayNames}</h3>
+                            {jadwal.keterangan && (
+                              <p className="text-gray-600 text-sm">{jadwal.keterangan}</p>
+                            )}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="ml-11">
+                        <p className="text-blue-700 font-bold text-xl">{jadwal.waktu}</p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Kritik Saran Section */}
         <div className="mb-16">

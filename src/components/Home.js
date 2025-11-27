@@ -254,10 +254,16 @@ const Home = () => {
             Mari bersama-sama melayani Dharma dan sesama dengan cinta kasih Buddha.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <button className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300">
+            <button 
+              onClick={() => navigate('/tentang-kami')}
+              className="bg-white text-blue-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition duration-300"
+            >
               Pelajari Lebih Lanjut
             </button>
-            <button className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300">
+            <button 
+              onClick={() => navigate('/tentang-kami#jadwal-puja')}
+              className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300"
+            >
               Jadwal Puja
             </button>
           </div>
