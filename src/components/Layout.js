@@ -340,13 +340,7 @@ const Layout = ({ children }) => {
 
       <footer className="bg-gray-800 text-white py-12">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
-            <div>
-              <h3 className="text-xl font-bold mb-6 text-white">
-                {infoUmum.judul || 'Vihara Buddhayana Dharmawira Centre'}
-              </h3>
-            </div>
-            
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8 md:gap-12">
             <div>
               <h4 className="text-lg font-semibold mb-5 text-white">Kontak</h4>
               <div className="space-y-3 text-sm text-gray-300">
