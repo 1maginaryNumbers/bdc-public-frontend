@@ -479,7 +479,7 @@ const Home = () => {
                       {activity.status === 'akan_datang' ? 'Akan Datang' : 
                        (activity.status === 'sedang_berlangsung' || activity.status === 'aktif') ? 'Aktif' : 'Selesai'}
                     </span>
-                    <span className="text-sm text-gray-500">{activity.waktu || 'TBA'}</span>
+                    <span className="text-sm text-gray-500">{activity.waktu || ''}</span>
                   </div>
                 </div>
               ))
