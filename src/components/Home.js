@@ -118,25 +118,72 @@ const Home = () => {
           const startDate = activity.tanggalMulai ? new Date(activity.tanggalMulai) : null;
           const endDate = activity.tanggalSelesai ? new Date(activity.tanggalSelesai) : null;
           
-          // Use start date if available, otherwise use end date
+          if (!startDate && !endDate) return false;
+          
+          // Use the most relevant date for comparison
+          // For upcoming activities, use start date
+          // For past activities, use end date
           const activityDate = startDate || endDate;
-          
-          if (!activityDate) return false;
-          
-          // Include activities that haven't ended more than 7 days ago
           const activityDateOnly = new Date(activityDate);
           activityDateOnly.setHours(0, 0, 0, 0);
-          const daysDiff = Math.floor((activityDateOnly - now) / (1000 * 60 * 60 * 24));
           
-          return daysDiff >= -7;
+          // Include activities that:
+          // 1. Are upcoming (start date in the future)
+          // 2. Are currently happening (start date <= now <= end date)
+          // 3. Recently ended (ended within 30 days)
+          if (startDate) {
+            const startDateOnly = new Date(startDate);
+            startDateOnly.setHours(0, 0, 0, 0);
+            
+            // If activity has started or will start, include it
+            if (startDateOnly >= now || (endDate && new Date(endDate).setHours(0, 0, 0, 0) >= now)) {
+              return true;
+            }
+          }
+          
+          // Include recently ended activities (within 30 days)
+          if (endDate) {
+            const endDateOnly = new Date(endDate);
+            endDateOnly.setHours(0, 0, 0, 0);
+            const daysSinceEnd = Math.floor((now - endDateOnly) / (1000 * 60 * 60 * 24));
+            
+            if (daysSinceEnd >= 0 && daysSinceEnd <= 30) {
+              return true;
+            }
+          }
+          
+          return false;
         })
         .sort((a, b) => {
-          // Get the date to compare (prefer tanggalMulai, fallback to tanggalSelesai)
-          const dateA = a.tanggalMulai ? new Date(a.tanggalMulai) : (a.tanggalSelesai ? new Date(a.tanggalSelesai) : new Date(0));
-          const dateB = b.tanggalMulai ? new Date(b.tanggalMulai) : (b.tanggalSelesai ? new Date(b.tanggalSelesai) : new Date(0));
+          // Get the date to compare
+          // For sorting, use the date closest to now (start date for upcoming, end date for past)
+          const getSortDate = (activity) => {
+            const startDate = activity.tanggalMulai ? new Date(activity.tanggalMulai) : null;
+            const endDate = activity.tanggalSelesai ? new Date(activity.tanggalSelesai) : null;
+            const now = new Date();
+            
+            if (startDate && startDate >= now) {
+              // Upcoming activity - use start date
+              return startDate;
+            } else if (endDate && endDate < now) {
+              // Past activity - use end date
+              return endDate;
+            } else if (startDate) {
+              // Currently happening - use start date
+              return startDate;
+            } else {
+              return endDate || new Date(0);
+            }
+          };
           
-          // Sort by date (nearest first)
-          return dateA - dateB;
+          const dateA = getSortDate(a);
+          const dateB = getSortDate(b);
+          
+          // Sort by absolute difference from now (nearest first)
+          const diffA = Math.abs(dateA - now);
+          const diffB = Math.abs(dateB - now);
+          
+          return diffA - diffB;
         });
       
       // Get the first 3 activities (nearest dates)
