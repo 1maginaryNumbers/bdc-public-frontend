@@ -77,7 +77,7 @@ const StrukturOrganisasi = () => {
                     <p className="text-gray-500 text-sm mb-2">Periode: {person.periode}</p>
                   )}
                   {person.kontak && (
-                    <p className="text-gray-600 text-sm">{person.kontak}</p>
+                    <p className="text-gray-600 text-sm">Kontak:{person.kontak}</p>
                   )}
                 </div>
               ))}
