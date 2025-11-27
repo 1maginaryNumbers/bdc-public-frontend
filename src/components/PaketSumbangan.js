@@ -18,6 +18,20 @@ const PaketSumbangan = () => {
   useEffect(() => {
     fetchPaketSumbangan();
     
+    const urlParams = new URLSearchParams(window.location.search);
+    const paymentStatus = urlParams.get('payment');
+    
+    if (paymentStatus === 'success') {
+      alert('Pembayaran berhasil! Terima kasih atas sumbangan Anda. Kuitansi pembayaran telah dikirim ke email Anda.');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (paymentStatus === 'pending') {
+      alert('Pembayaran sedang diproses. Silakan selesaikan pembayaran Anda. Kami akan mengirimkan konfirmasi via email setelah pembayaran berhasil.');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    } else if (paymentStatus === 'error') {
+      alert('Pembayaran gagal atau dibatalkan. Silakan coba lagi.');
+      window.history.replaceState({}, document.title, window.location.pathname);
+    }
+    
     const isProduction = process.env.REACT_APP_MIDTRANS_IS_PRODUCTION === 'true';
     const scriptUrl = isProduction 
       ? 'https://app.midtrans.com/snap/snap.js'
