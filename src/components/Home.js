@@ -108,8 +108,39 @@ const Home = () => {
         activitiesData = data.kegiatan;
       }
       
-      // Get the first 3 activities for the home page
-      setActivities(activitiesData.slice(0, 3));
+      const now = new Date();
+      now.setHours(0, 0, 0, 0);
+      
+      // Filter and sort activities by nearest date
+      const sortedActivities = activitiesData
+        .filter(activity => {
+          // Include activities that have a date (tanggalMulai or tanggalSelesai)
+          const startDate = activity.tanggalMulai ? new Date(activity.tanggalMulai) : null;
+          const endDate = activity.tanggalSelesai ? new Date(activity.tanggalSelesai) : null;
+          
+          // Use start date if available, otherwise use end date
+          const activityDate = startDate || endDate;
+          
+          if (!activityDate) return false;
+          
+          // Include activities that haven't ended more than 7 days ago
+          const activityDateOnly = new Date(activityDate);
+          activityDateOnly.setHours(0, 0, 0, 0);
+          const daysDiff = Math.floor((activityDateOnly - now) / (1000 * 60 * 60 * 24));
+          
+          return daysDiff >= -7;
+        })
+        .sort((a, b) => {
+          // Get the date to compare (prefer tanggalMulai, fallback to tanggalSelesai)
+          const dateA = a.tanggalMulai ? new Date(a.tanggalMulai) : (a.tanggalSelesai ? new Date(a.tanggalSelesai) : new Date(0));
+          const dateB = b.tanggalMulai ? new Date(b.tanggalMulai) : (b.tanggalSelesai ? new Date(b.tanggalSelesai) : new Date(0));
+          
+          // Sort by date (nearest first)
+          return dateA - dateB;
+        });
+      
+      // Get the first 3 activities (nearest dates)
+      setActivities(sortedActivities.slice(0, 3));
     } catch (error) {
       console.error('Error fetching activities:', error);
     }
@@ -261,7 +292,12 @@ const Home = () => {
               Pelajari Lebih Lanjut
             </button>
             <button 
-              onClick={() => navigate('/tentang-kami#jadwal-puja')}
+              onClick={() => {
+                const element = document.getElementById('jadwal-puja');
+                if (element) {
+                  element.scrollIntoView({ behavior: 'smooth' });
+                }
+              }}
               className="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-600 transition duration-300"
             >
               Jadwal Puja
@@ -418,7 +454,7 @@ const Home = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           {/* Jadwal Puja Bakti Section */}
           {infoUmum.jadwalPujaBakti && infoUmum.jadwalPujaBakti.length > 0 && (
-            <div className="mb-16">
+            <div id="jadwal-puja" className="mb-16 scroll-mt-20">
               <div className="text-center mb-8">
                 <h2 className="text-4xl font-bold text-gray-900 mb-4">Jadwal Puja Bakti</h2>
                 <p className="text-lg text-gray-600">Jadwal ibadah rutin di vihara kami</p>
