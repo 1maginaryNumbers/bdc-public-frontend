@@ -181,7 +181,7 @@ const Merchandise = () => {
               <div className="p-6 text-center">
                 {product.gambar ? (
                   <img
-                    src={`${API_URL}${product.gambar}`}
+                    src={product.gambar.startsWith('data:') ? product.gambar : `${API_URL}${product.gambar}`}
                     alt={product.nama}
                     className="w-full h-32 object-cover rounded-lg mb-4"
                     onError={(e) => {
@@ -256,7 +256,7 @@ const Merchandise = () => {
               <div className="flex items-center gap-4 mb-2">
                 {selectedProduct.gambar && (
                   <img
-                    src={`${API_URL}${selectedProduct.gambar}`}
+                    src={selectedProduct.gambar.startsWith('data:') ? selectedProduct.gambar : `${API_URL}${selectedProduct.gambar}`}
                     alt={selectedProduct.nama}
                     className="w-16 h-16 object-cover rounded"
                   />
