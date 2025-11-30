@@ -66,7 +66,7 @@ const Kegiatan = () => {
         }
       });
 
-  const handleRegistrationClick = (activity) => {
+  const handleRegistrationClick = async (activity) => {
     if (activity.status !== 'sedang_berlangsung') {
       if (activity.status === 'akan_datang') {
         alert('Pendaftaran belum dibuka. Kegiatan ini akan datang.');
@@ -75,6 +75,15 @@ const Kegiatan = () => {
       }
       return;
     }
+    
+    if (activity.kapasitas && activity.kapasitas > 0) {
+      const totalPendaftaran = activity.totalPendaftaran || 0;
+      if (totalPendaftaran >= activity.kapasitas) {
+        alert(`Kuota kegiatan sudah terpenuhi (${totalPendaftaran}/${activity.kapasitas}). Pendaftaran tidak dapat dilakukan.`);
+        return;
+      }
+    }
+    
     setSelectedActivity(activity);
     setShowRegistrationForm(true);
   };
