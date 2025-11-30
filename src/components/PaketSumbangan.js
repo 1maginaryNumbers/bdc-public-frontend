@@ -296,29 +296,8 @@ const PaketSumbangan = () => {
       </div>
 
       {showModal && selectedPaket && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          backgroundColor: 'rgba(0,0,0,0.5)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          zIndex: 1000,
-          padding: '20px'
-        }}>
-          <div style={{
-            backgroundColor: '#fff',
-            borderRadius: '12px',
-            padding: '30px',
-            maxWidth: '500px',
-            width: '100%',
-            maxHeight: '90vh',
-            overflowY: 'auto',
-            position: 'relative'
-          }}>
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4 md:p-6">
+          <div className="bg-white rounded-lg md:rounded-xl p-5 md:p-8 max-w-md w-full max-h-[90vh] overflow-y-auto relative">
             <button
               onClick={handleCloseModal}
               style={{
