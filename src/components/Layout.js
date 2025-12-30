@@ -370,7 +370,7 @@ const Layout = ({ children }) => {
                     </div>
                     <div className="flex items-center">
                       <span className="mr-3 text-orange-400">📞</span>
-                      <p>(021) 1234-5678</p>
+                      <p>(031) 841-2345</p>
                     </div>
                     <div className="flex items-center">
                       <span className="mr-3 text-orange-400">✉️</span>
@@ -427,10 +427,7 @@ const Layout = ({ children }) => {
                   <span className="mr-3 text-orange-400">📷</span>
                   <p>Instagram: @viharabdc</p>
                 </div>
-                <div className="flex items-center">
-                  <span className="mr-3 text-orange-400">📺</span>
-                  <p>YouTube: Vihara BDC Channel</p>
-                </div>
+                
               </div>
             </div>
           </div>
