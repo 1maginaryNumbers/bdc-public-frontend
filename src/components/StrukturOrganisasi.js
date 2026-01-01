@@ -32,6 +32,18 @@ const StrukturOrganisasi = () => {
     }
   };
 
+  const getAvatar = (jabatan) => {
+    if (jabatan && jabatan.toLowerCase().includes('bhikkhu')) {
+      return '👨‍🦲';
+    }
+    if (jabatan && (jabatan.toLowerCase().includes('ibu') || jabatan.toLowerCase().includes('sekretaris') || jabatan.toLowerCase().includes('koordinator'))) {
+      const lowerJabatan = jabatan.toLowerCase();
+      if (lowerJabatan.includes('ibu') || lowerJabatan.includes('sekretaris') || lowerJabatan.includes('karitas') || lowerJabatan.includes('puja')) {
+        return '👩‍💼';
+      }
+    }
+    return '👨‍💼';
+  };
 
   if (loading) {
     return (
@@ -58,6 +70,7 @@ const StrukturOrganisasi = () => {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {struktur.map((person) => (
                 <div key={person._id} className="bg-white rounded-lg shadow-md p-6 text-center hover:shadow-lg transition-shadow">
+                  <div className="text-6xl mb-4">{getAvatar(person.jabatan)}</div>
                   <h3 className="text-xl font-semibold text-gray-900 mb-2">{person.nama}</h3>
                   <p className="text-blue-600 font-medium mb-2">{person.jabatan}</p>
                   {person.periode && (
